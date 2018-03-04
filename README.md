@@ -16,25 +16,16 @@ Set up the example datasets:
 
 - Create `input` and `output` directories in the root of this project
 - Copy `examples/a_example.in` to `input/a_example.in`
-- Copy `examples/a_example.out` to `examples/a_example.out`.
+- Copy `examples/a_example.out` to `output/a_example.out`.
 
 **Notice that the input and output files have the same name with different
 extension**
 
 
-## Tasks
+## Score
 
-### Validate
-
-This will check the `.out` files based on the `.in` file.
-
-```
-bundle exec rake rides:validate
-```
-
-### Score
-
-This will score the simulation based on the formula stated in the PDF.
+This will score the simulation based on the formula stated in the PDF. This will
+also apply the validations.
 
 ```
 bundle exec rake rides:score

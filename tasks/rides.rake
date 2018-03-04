@@ -2,37 +2,24 @@ require_relative '../src/validation'
 require_relative '../src/scoring'
 
 namespace :rides do
-  desc 'Validate the output file format'
-  task :validate do
-    input_paths.each do |input_path|
-      dataset_name = dataset_name(input_path)
-      puts "Validating dataset #{dataset_name}"
-
-      input = read_content(input_path)
-      output_path = output_path_for(dataset_name)
-      output = read_content(output_path)
+  task :score do
+    each_dataset do |name, input, output|
+      score = 0
+      puts "*" * 25, "Scoring dataset #{name}"
 
       validation = Validation.for(input, output)
 
       puts "#{validation.message}"
 
-      exit 1 if validation.result == 'failure'
-    end
-  end
+      validation.result
 
-  task :score => :validate do
-    input_paths.each do |input_path|
-      dataset_name = dataset_name(input_path)
-      puts "Scoring dataset #{dataset_name}"
-
-      input = read_content(input_path)
-      output_path = output_path_for(dataset_name)
-      output = read_content(output_path)
-
-      score = Scoring.new(input, output).do
+      if validation.result == 'success'
+        score = Scoring.new(input, output).do
+      end
 
       puts "#{score} points"
     end
+    puts "*" * 25
   end
 
   def output_path_for(dataset_name)
@@ -45,6 +32,18 @@ namespace :rides do
 
   def read_content(path)
     File.read(path)
+  end
+
+  def each_dataset
+    input_paths.each do |input_path|
+      dataset_name = dataset_name(input_path)
+      output_path = output_path_for(dataset_name)
+
+      input = read_content(input_path)
+      output = read_content(output_path)
+
+      yield(dataset_name, input, output)
+    end
   end
 
   def input_paths

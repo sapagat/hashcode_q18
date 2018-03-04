@@ -1,6 +1,11 @@
+require_relative '../src/ride'
+
 class Input
   THIRD = 2
   FOURTH = 3
+  FIFTH = 4
+  SIXTH = 5
+  HEADER_OFFSET = 1
 
   def initialize(content)
     @rows = []
@@ -9,19 +14,50 @@ class Input
   end
 
   def vehicles_count
-    @rows.first[THIRD]
+    header[THIRD]
   end
 
   def rides_count
-    @rows.first[FOURTH]
+    header[FOURTH]
+  end
+
+  def bonus
+    header[FIFTH]
+  end
+
+  def max_steps
+    header[SIXTH]
+  end
+
+  def ride(index)
+    descriptor = @rows[index + HEADER_OFFSET]
+    build_ride(descriptor)
   end
 
   private
+
+  def header
+    @rows.first
+  end
 
   def read(content)
     content.each_line do |raw_line|
       next if raw_line.empty?
       @rows << raw_line.split(' ').map { |element| element.to_i }
     end
+  end
+
+  def build_ride(descriptor)
+    start_x = descriptor[0]
+    start_y = descriptor[1]
+    finish_x = descriptor[2]
+    finish_y = descriptor[3]
+    earliest_start = descriptor[4]
+    latest_finish = descriptor[5]
+
+    Ride.new(
+     Start.new(start_x, start_y, earliest_start),
+     Finish.new(finish_x, finish_y, latest_finish)
+   )
   end
 end

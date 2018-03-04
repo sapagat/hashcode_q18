@@ -1,4 +1,5 @@
 require_relative '../src/validation'
+require_relative '../src/scoring'
 
 namespace :rides do
   desc 'Validate the output file format'
@@ -20,7 +21,18 @@ namespace :rides do
   end
 
   task :score => :validate do
-    puts 'I still do not know how to score =('
+    input_paths.each do |input_path|
+      dataset_name = dataset_name(input_path)
+      puts "Scoring dataset #{dataset_name}"
+
+      input = read_content(input_path)
+      output_path = output_path_for(dataset_name)
+      output = read_content(output_path)
+
+      score = Scoring.new(input, output).do
+
+      puts "#{score} points"
+    end
   end
 
   def output_path_for(dataset_name)

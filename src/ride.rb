@@ -1,9 +1,10 @@
 require_relative 'position'
 
 class Ride
-  attr_reader :start, :finish
+  attr_reader :start, :finish, :id
 
-  def initialize(start, finish)
+  def initialize(id, start, finish)
+    @id = id
     @start = start
     @finish = finish
     @wait_time = 0

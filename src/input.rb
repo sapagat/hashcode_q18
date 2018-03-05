@@ -1,4 +1,5 @@
-require_relative '../src/ride'
+require_relative 'ride'
+require_relative 'vehicle'
 
 class Input
   THIRD = 2
@@ -17,6 +18,14 @@ class Input
     header[THIRD]
   end
 
+  def vehicles
+    result = []
+    vehicles_count.times do
+      result << Vehicle.new
+    end
+    result
+  end
+
   def rides_count
     header[FOURTH]
   end
@@ -31,7 +40,20 @@ class Input
 
   def ride(index)
     descriptor = @rows[index + HEADER_OFFSET]
-    build_ride(descriptor)
+    build_ride(index, descriptor)
+  end
+
+  def rides
+    descriptors = @rows[1..-1]
+    index = 0
+    result = []
+
+    descriptors.each do |descriptor|
+      result << build_ride(index, descriptor)
+      index += 1
+    end
+
+    result
   end
 
   private
@@ -47,7 +69,7 @@ class Input
     end
   end
 
-  def build_ride(descriptor)
+  def build_ride(id, descriptor)
     start_x = descriptor[0]
     start_y = descriptor[1]
     finish_x = descriptor[2]
@@ -56,8 +78,9 @@ class Input
     latest_finish = descriptor[5]
 
     Ride.new(
-     Start.new(start_x, start_y, earliest_start),
-     Finish.new(finish_x, finish_y, latest_finish)
-   )
+      id,
+      Start.new(start_x, start_y, earliest_start),
+      Finish.new(finish_x, finish_y, latest_finish)
+     )
   end
 end

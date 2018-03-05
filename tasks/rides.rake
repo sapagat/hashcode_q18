@@ -1,5 +1,6 @@
 require_relative '../src/validation'
 require_relative '../src/scoring'
+require_relative '../src/planner'
 
 namespace :rides do
   task :score do
@@ -20,6 +21,34 @@ namespace :rides do
       puts "#{score} points"
     end
     puts "*" * 25
+  end
+
+  task :plan do
+    total_score = 0
+    each_input do |name, input|
+      score = 0
+      puts "*" * 25, "Scoring dataset #{name}"
+      output = Planner.new(input).plan
+
+      path = File.join(output_directory, "#{name}.out")
+      File.open(path, 'w') do |file|
+        file.write(output)
+      end
+
+      validation = Validation.for(input, output)
+
+      puts "#{validation.message}"
+
+      validation.result
+
+      if validation.result == 'success'
+        score = Scoring.new(input, output).do
+      end
+
+      puts "#{score} points"
+      total_score += score
+    end
+      puts "*" * 25, "Total points: #{total_score}"
   end
 
   def output_path_for(dataset_name)
@@ -43,6 +72,15 @@ namespace :rides do
       output = read_content(output_path)
 
       yield(dataset_name, input, output)
+    end
+  end
+
+  def each_input
+    input_paths.each do |input_path|
+      dataset_name = dataset_name(input_path)
+      input = read_content(input_path)
+
+      yield(dataset_name, input)
     end
   end
 

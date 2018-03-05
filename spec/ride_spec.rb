@@ -1,6 +1,7 @@
 describe 'Ride' do
   it 'predicts the finish based on the start' do
     ride = Ride.new(
+    id,
      Start.new(0,0, 0),
      Finish.new(1, 1, 3)
      )
@@ -12,6 +13,7 @@ describe 'Ride' do
 
   it 'waits until the earliest start has been reached' do
     ride = Ride.new(
+     id,
      Start.new(0,0, 2),
      Finish.new(1, 1, 5)
      )
@@ -20,5 +22,9 @@ describe 'Ride' do
 
     wait_time = 2
     expect(ride.finish_step).to eq(start_step + wait_time + ride.distance)
+  end
+
+  def id
+    1234
   end
 end

@@ -31,6 +31,16 @@ also apply the validations.
 bundle exec rake rides:score
 ```
 
+## Plan
+
+You can run a plan as follows:
+
+```
+bundle exec rake rides:plan[<name>]
+```
+
+The plans are registered in `src/planner`.
+
 ## Test
 
 ```

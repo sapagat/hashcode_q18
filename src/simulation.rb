@@ -8,7 +8,11 @@ class Simulation
     @rides = rides
     @max_steps = max_steps
     @score = Score.new(bonus)
-    @current_step = 0
+    @start_step = 0
+  end
+
+  def start_from(step)
+    @start_step = step
   end
 
   def run
@@ -16,6 +20,7 @@ class Simulation
   end
 
   def score
+    @current_step = @start_step
     @rides.each do |ride|
       break if @current_step > @max_steps
 

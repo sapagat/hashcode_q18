@@ -3,12 +3,14 @@ require_relative 'vehicle'
 require_relative 'planners/single_ride'
 require_relative 'planners/always_in_time'
 require_relative 'planners/first_ride_free'
+require_relative 'planners/max_next_score'
 
 class Planner
   STRATEGIES = {
     nil => Planners::SingleRide,
     'always_in_time' => Planners::AlwaysInTime,
-    'first_ride_free' => Planners::FirstRideFree
+    'first_ride_free' => Planners::FirstRideFree,
+    'max_next_score' => Planners::MaxNextScore
   }
 
   def initialize(input, planner_name=nil)
@@ -29,7 +31,8 @@ class Planner
       rides: rides,
       max_steps: @input.max_steps,
       rows: @input.grid_rows,
-      columns: @input.grid_columns
+      columns: @input.grid_columns,
+      bonus: @input.bonus
     }
     strategy = @strategy_class.new(settings)
     strategy.plan

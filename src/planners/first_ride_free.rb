@@ -1,5 +1,5 @@
 module Planners
-  class AlwaysInTime
+  class FirstRideFree
     def initialize(settings)
       @vehicles = settings[:vehicles]
       @rides = settings[:rides]
@@ -9,25 +9,23 @@ module Planners
     end
 
     def plan
-      the_vehicle = @vehicles.first
       @clock.next_step do |step|
-        next unless the_vehicle.free?(step)
+        @vehicles.each do |vehicle|
+          next unless vehicle.free?(step)
 
-        if step == 0
-          the_vehicle.assign(@rides.first)
-        else
-          ride = @rides.find do |ride|
-            next unless ride.unassigned?
-
-            ride.start.earliest_step > max_distance_time
-          end
-
-          the_vehicle.assign(ride)
+          ride = first_ride_free
+          vehicle.assign(ride)
         end
       end
     end
 
     private
+
+    def first_ride_free
+      @rides.find do |ride|
+        ride.unassigned?
+      end
+    end
 
     def max_distance_time
       @rows + @columns
@@ -50,7 +48,7 @@ module Planners
       private
 
       def inform
-        return unless @current_step % 1000 == 0
+        return unless @current_step % 100000 == 0
 
         puts "Still in progress (#{@current_step}/#{@end_of_time}) ..."
       end

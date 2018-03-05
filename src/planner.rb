@@ -2,12 +2,15 @@ require_relative 'input'
 require_relative 'vehicle'
 require_relative 'planners/single_ride'
 require_relative 'planners/always_in_time'
+require_relative 'planners/first_ride_free'
 
 class Planner
   STRATEGIES = {
     nil => Planners::SingleRide,
-    'always_in_time' => Planners::AlwaysInTime
+    'always_in_time' => Planners::AlwaysInTime,
+    'first_ride_free' => Planners::FirstRideFree
   }
+
   def initialize(input, planner_name=nil)
     @input = Input.new(input)
     @strategy_class = STRATEGIES[planner_name]

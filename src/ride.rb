@@ -21,6 +21,14 @@ class Ride
     current_step
   end
 
+  def assign(vehicle)
+    @vehicle = vehicle
+  end
+
+  def unassigned?
+    !@vehicle
+  end
+
   def timeless?
     @start.just_in_time?
   end
@@ -59,6 +67,8 @@ class Finish < Position
 end
 
 class Start < Position
+  attr_reader :earliest_step
+  
   def initialize(x, y, earliest_step)
     @earliest_step = earliest_step
 

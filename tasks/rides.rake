@@ -23,12 +23,13 @@ namespace :rides do
     puts "*" * 25
   end
 
-  task :plan do
+  task :plan, [:strategy] do |t, args|
+    strategy = args[:strategy]
     total_score = 0
     each_input do |name, input|
       score = 0
-      puts "*" * 25, "Scoring dataset #{name}"
-      output = Planner.new(input).plan
+      puts "*" * 25, "Planning dataset #{name}"
+      output = Planner.new(input, strategy).plan
 
       path = File.join(output_directory, "#{name}.out")
       File.open(path, 'w') do |file|

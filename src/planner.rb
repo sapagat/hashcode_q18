@@ -1,9 +1,16 @@
 require_relative 'input'
 require_relative 'vehicle'
+require_relative 'planners/single_ride'
+require_relative 'planners/always_in_time'
 
 class Planner
-  def initialize(input)
+  STRATEGIES = {
+    nil => Planners::SingleRide,
+    'always_in_time' => Planners::AlwaysInTime
+  }
+  def initialize(input, planner_name=nil)
     @input = Input.new(input)
+    @strategy_class = STRATEGIES[planner_name]
   end
 
   def plan
@@ -14,7 +21,15 @@ class Planner
   private
 
   def assign_rides
-    vehicles.first.assign(rides.first)
+    settings = {
+      vehicles: vehicles,
+      rides: rides,
+      max_steps: @input.max_steps,
+      rows: @input.grid_rows,
+      columns: @input.grid_columns
+    }
+    strategy = @strategy_class.new(settings)
+    strategy.plan
   end
 
   def build_output
@@ -37,7 +52,7 @@ class Planner
   end
 
   def rides
-    @input.rides
+    @rides ||= @input.rides
   end
 
   def vehicles_count

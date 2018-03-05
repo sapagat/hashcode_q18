@@ -1,12 +1,18 @@
 require_relative 'score'
 
 class Simulation
+  attr_reader :current_step
+
   def initialize(vehicle, rides, max_steps, bonus)
     @vehicle = vehicle
     @rides = rides
     @max_steps = max_steps
     @score = Score.new(bonus)
     @current_step = 0
+  end
+
+  def run
+    score
   end
 
   def score
@@ -18,6 +24,16 @@ class Simulation
     end
 
     @score.total
+  end
+
+  def all_rides_completed?
+    @rides.each do |ride|
+      next if ride.finish_step <= @max_steps
+
+      return false
+    end
+
+    true
   end
 
   private

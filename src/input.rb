@@ -2,6 +2,8 @@ require_relative 'ride'
 require_relative 'vehicle'
 
 class Input
+  FIRST = 0
+  SECOND = 1
   THIRD = 2
   FOURTH = 3
   FIFTH = 4
@@ -36,6 +38,14 @@ class Input
 
   def max_steps
     header[SIXTH]
+  end
+
+  def grid_rows
+    header[FIRST]
+  end
+
+  def grid_columns
+    header[SECOND]
   end
 
   def ride(index)

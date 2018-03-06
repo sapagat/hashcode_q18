@@ -32,12 +32,10 @@ class Vehicle
   private
 
   def update_availability
-    simulation_vehicle = Vehicle.new
-    simulation_rides = @rides.dup
     max_steps = 1000000000
     bonus = 0
 
-    simulation = Simulation.new(simulation_vehicle, simulation_rides, max_steps, bonus)
+    simulation = Simulation.new(self, @rides, max_steps, bonus)
     simulation.run
     @free_at = simulation.current_step
   end

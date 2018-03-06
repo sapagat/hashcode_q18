@@ -23,12 +23,6 @@ module Planners
       find_max_score(vehicle, rides)
     end
 
-    def rides_pending
-      @rides.select do |ride|
-        ride.unassigned?
-      end
-    end
-
     def fetch_pending(max)
       rides = []
       @rides.each do |ride|
@@ -52,10 +46,12 @@ module Planners
     def compute_max_score_per_ride(vehicle, rides)
       ride_scores = {}
       rides.each do |ride|
-        simulation_vehicle = vehicle.dup
-        simulation_rides = [ride.dup]
-
-        simulation = Simulation.new(simulation_vehicle, simulation_rides, @max_steps, @bonus)
+        simulation = Simulation.new(
+          vehicle,
+          [ride],
+          @max_steps,
+          @bonus
+        )
         simulation.start_from(@clock.current_step)
         score = simulation.score
 

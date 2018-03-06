@@ -1,10 +1,7 @@
-module Planners
-  class SingleRide
-    def initialize(settings)
-      @vehicles = settings[:vehicles]
-      @rides = settings[:rides]
-    end
+require_relative 'planner'
 
+module Planners
+  class SingleRide < Planner
     def plan
       @vehicles.first.assign(@rides.first)
     end

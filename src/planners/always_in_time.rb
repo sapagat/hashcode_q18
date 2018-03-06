@@ -1,15 +1,7 @@
-require_relative '../clock'
+require_relative 'planner'
 
 module Planners
-  class AlwaysInTime
-    def initialize(settings)
-      @vehicles = settings[:vehicles]
-      @rides = settings[:rides]
-      @clock = Clock.new(settings[:max_steps])
-      @rows = settings[:rows]
-      @columns = settings[:columns]
-    end
-
+  class AlwaysInTime < Planner
     def plan
       the_vehicle = @vehicles.first
       @clock.next_step do |step|

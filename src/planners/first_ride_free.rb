@@ -1,15 +1,7 @@
-require_relative '../clock'
+require_relative 'planner'
 
 module Planners
-  class FirstRideFree
-    def initialize(settings)
-      @vehicles = settings[:vehicles]
-      @rides = settings[:rides]
-      @clock = Clock.new(settings[:max_steps])
-      @rows = settings[:rows]
-      @columns = settings[:columns]
-    end
-
+  class FirstRideFree < Planner
     def plan
       @clock.next_step do |step|
         @vehicles.each do |vehicle|

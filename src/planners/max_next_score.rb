@@ -1,19 +1,9 @@
 require_relative '../simulation'
-require_relative '../clock'
+require_relative 'planner'
 
 module Planners
-  class MaxNextScore
+  class MaxNextScore < Planner
     MAX_RIDES_TO_COMPARE = 5000
-
-    def initialize(settings)
-      @vehicles = settings[:vehicles]
-      @rides = settings[:rides]
-      @clock = Clock.new(settings[:max_steps])
-      @max_steps = settings[:max_steps]
-      @rows = settings[:rows]
-      @columns = settings[:columns]
-      @bonus = settings[:bonus]
-    end
 
     def plan
       @clock.next_step do |step|

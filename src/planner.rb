@@ -4,13 +4,15 @@ require_relative 'planners/single_ride'
 require_relative 'planners/always_in_time'
 require_relative 'planners/first_ride_free'
 require_relative 'planners/max_next_score'
+require_relative 'planners/max_next_common_score'
 
 class Planner
   STRATEGIES = {
     nil => Planners::SingleRide,
     'always_in_time' => Planners::AlwaysInTime,
     'first_ride_free' => Planners::FirstRideFree,
-    'max_next_score' => Planners::MaxNextScore
+    'max_next_score' => Planners::MaxNextScore,
+    'max_next_common_score' => Planners::MaxNextCommonScore
   }
 
   def initialize(input, planner_name=nil)

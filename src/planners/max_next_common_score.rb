@@ -1,26 +1,33 @@
-require_relative '../simulation'
 require_relative 'planner'
+require_relative '../wishlist'
 
 module Planners
-  class MaxNextScore < Planner
+  class MaxNextCommonScore < Planner
     MAX_RIDES_TO_COMPARE = 5000
 
     def plan
       @clock.next_step do |step|
-        @vehicles.each do |vehicle|
-          next unless vehicle.free?(step)
-
-          calculate_best_assignments(vehicle)
-        end
+        calculate_best_common_assignments
       end
     end
 
     private
 
-    def calculate_best_assignments(vehicle)
+    def calculate_best_common_assignments
       wishlist = Wishlist.new
-      add_wishes(wishlist, vehicle)
+      each_free_vehicle do |vehicle|
+        add_wishes(wishlist, vehicle)
+      end
+
       wishlist.solve
+    end
+
+    def each_free_vehicle
+      @vehicles.each do |vehicle|
+        next unless vehicle.free?(@clock.current_step)
+
+        yield(vehicle)
+      end
     end
 
     def add_wishes(wishlist, vehicle)

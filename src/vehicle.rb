@@ -1,7 +1,7 @@
 require_relative 'simulation'
 
 class Vehicle
-  attr_reader :rides
+  attr_reader :rides, :position
 
   def initialize
     @position = Position.new(0, 0)
@@ -15,7 +15,7 @@ class Vehicle
     ride.assign(self)
     @rides << ride
 
-    update_availability
+    update_state
   end
 
   def free?(step)
@@ -31,7 +31,7 @@ class Vehicle
 
   private
 
-  def update_availability
+  def update_state
     max_steps = 1000000000
     bonus = 0
 

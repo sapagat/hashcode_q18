@@ -68,7 +68,7 @@ end
 
 class Start < Position
   attr_reader :earliest_step
-  
+
   def initialize(x, y, earliest_step)
     @earliest_step = earliest_step
 

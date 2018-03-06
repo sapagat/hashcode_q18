@@ -4,7 +4,7 @@ class Simulation
   attr_reader :current_step
 
   def initialize(vehicle, rides, max_steps, bonus)
-    @vehicle = vehicle.dup
+    @vehicle = vehicle
     @rides = rides.dup
     @max_steps = max_steps
     @score = Score.new(bonus)

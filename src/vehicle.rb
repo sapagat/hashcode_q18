@@ -13,8 +13,6 @@ class Vehicle
   def assign(ride)
     return unless ride
 
-    ride.assign(self)
-
     update_availability(ride)
     @rides << ride
   end

@@ -15,10 +15,6 @@ class Simulation
     @start_step = step
   end
 
-  def run
-    score
-  end
-
   def score
     @current_step = @start_step
     @rides.each do |ride|
@@ -29,16 +25,6 @@ class Simulation
     end
 
     @score.total
-  end
-
-  def all_rides_completed?
-    @rides.each do |ride|
-      next if ride.finish_step <= @max_steps
-
-      return false
-    end
-
-    true
   end
 
   private

@@ -43,7 +43,10 @@ namespace :rides do
       validation.result
 
       if validation.result == 'success'
-        score = Scoring.new(input, output).do
+        scoring = Scoring.new(input, output)
+        score = scoring.do
+        statistics = scoring.statistics
+        puts "#{statistics}"
       end
 
       puts "#{score} points"

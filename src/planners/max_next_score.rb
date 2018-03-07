@@ -55,7 +55,7 @@ module Planners
       rides.each do |ride|
         simulation = Simulation.new(
           vehicle.dup,
-          [ride],
+          [ride.dup],
           @max_steps,
           @bonus
         )
@@ -64,6 +64,7 @@ module Planners
 
         ride_scores[ride] = score
       end
+
 
       ride_scores
     end

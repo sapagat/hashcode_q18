@@ -8,9 +8,11 @@ class Ride
     @start = start
     @finish = finish
     @wait_time = 0
+    @completed = false
   end
 
   def perform(vehicle, start_step)
+    assign(vehicle)
     current_step = start_step
 
     distance = vehicle.go_to(@start)
@@ -23,12 +25,18 @@ class Ride
     distance = vehicle.go_to(@finish)
     current_step += distance
     @finish.arrived_at(current_step)
-    
+
+    @completed = true
+
     current_step
   end
 
   def assign(vehicle)
     @vehicle = vehicle
+  end
+
+  def completed?
+    @completed
   end
 
   def unassigned?

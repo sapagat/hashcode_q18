@@ -15,12 +15,14 @@ class Scoring
 
   def do
     each_vehicle_rides do |vehicle, rides|
-      score = Simulation.new(
+      simulation = Simulation.new(
         vehicle,
         rides,
         max_steps,
         bonus
-      ).score
+      )
+      simulation.run
+      score = simulation.score
       update_metrics(rides, score)
     end
 

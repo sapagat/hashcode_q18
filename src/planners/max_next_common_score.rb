@@ -58,20 +58,14 @@ module Planners
     end
 
     def score_rides(vehicle, rides)
-      ride_scores = {}
-      rides.each do |ride|
-        simulation = Simulation.new(
-          vehicle.dup,
-          [ride.dup],
-          @max_steps,
-          @bonus
-        )
-        simulation.start_from(@clock.current_step)
-        score = simulation.score
-
-        ride_scores[ride] = score
-      end
-
+      start_step = @clock.current_step
+      ride_scores = Simulation.score_rides(
+        vehicle,
+        rides,
+        start_step,
+        @max_steps,
+        @bonus
+      )
       ride_scores
     end
   end

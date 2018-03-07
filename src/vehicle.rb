@@ -1,4 +1,5 @@
 require_relative 'simulation'
+require_relative 'position'
 
 class Vehicle
   attr_reader :rides, :position
@@ -13,9 +14,9 @@ class Vehicle
     return unless ride
 
     ride.assign(self)
-    @rides << ride
 
-    update_state
+    update_availability(ride)
+    @rides << ride
   end
 
   def free?(step)
@@ -31,12 +32,9 @@ class Vehicle
 
   private
 
-  def update_state
-    max_steps = 1000000000
-    bonus = 0
-
-    simulation = Simulation.new(self, @rides, max_steps, bonus)
-    simulation.run
-    @free_at = simulation.current_step
+  def update_availability(ride)
+    start_step = @free_at
+    finish_step = ride.perform(self, start_step)
+    @free_at = finish_step
   end
 end

@@ -44,11 +44,9 @@ class Simulation
   private
 
   def perform(ride)
-    distance = @vehicle.go_to(ride.start)
-    @current_step += distance
-
-    @current_step = ride.perform(@current_step)
-    @vehicle.go_to(ride.finish)
+    start_step = @current_step
+    finish_step = ride.perform(@vehicle, start_step)
+    @current_step = finish_step
   end
 
   def score_ride(ride)

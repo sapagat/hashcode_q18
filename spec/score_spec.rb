@@ -8,7 +8,7 @@ describe 'Score' do
       Start.new(0,0, very_early),
       Finish.new(1, 1, very_late)
     )
-    ride.perform(very_early)
+    ride.perform(a_vehicle, very_early)
 
     scoring = Score.new()
     scoring.add(ride)
@@ -22,14 +22,14 @@ describe 'Score' do
       Start.new(0,0, very_early),
       Finish.new(1,1, very_late)
     )
-    first_ride.perform(very_early)
+    first_ride.perform(a_vehicle, very_early)
 
     second_ride = Ride.new(
       id,
       Start.new(1,1, very_early),
       Finish.new(2,2, very_late)
     )
-    second_ride.perform(early)
+    second_ride.perform(a_vehicle, early)
 
     scoring = Score.new()
     scoring.add(first_ride)
@@ -44,7 +44,7 @@ describe 'Score' do
       Start.new(0,0, very_early),
       Finish.new(1, 1, very_early)
     )
-    ride.perform(very_late)
+    ride.perform(a_vehicle, very_late)
 
     scoring = Score.new()
     scoring.add(ride)
@@ -60,12 +60,16 @@ describe 'Score' do
     )
     bonus = 5
 
-    ride.perform(very_early)
+    ride.perform(a_vehicle, very_early)
 
     scoring = Score.new(bonus)
     scoring.add(ride)
 
     expect(scoring.total).to eq(bonus + ride.distance)
+  end
+
+  def a_vehicle
+    Vehicle.new
   end
 
   def very_early

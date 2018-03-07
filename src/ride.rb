@@ -10,14 +10,20 @@ class Ride
     @wait_time = 0
   end
 
-  def perform(current_step)
+  def perform(vehicle, start_step)
+    current_step = start_step
+
+    distance = vehicle.go_to(@start)
+    current_step += distance
+
     wait_time = @start.wait_time(current_step)
     current_step += wait_time
-
     @start.arrived_at(current_step)
 
+    distance = vehicle.go_to(@finish)
     current_step += distance
     @finish.arrived_at(current_step)
+    
     current_step
   end
 

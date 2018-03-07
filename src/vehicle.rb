@@ -2,7 +2,7 @@ require_relative 'simulation'
 require_relative 'position'
 
 class Vehicle
-  attr_reader :rides, :position
+  attr_reader :rides, :position, :free_at
 
   def initialize
     @position = Position.new(0, 0)

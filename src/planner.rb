@@ -5,6 +5,7 @@ require_relative 'planners/always_in_time'
 require_relative 'planners/first_ride_free'
 require_relative 'planners/max_next_score'
 require_relative 'planners/max_next_common_score'
+require_relative 'planners/max_journal_score'
 
 class Planner
   STRATEGIES = {
@@ -12,7 +13,8 @@ class Planner
     'always_in_time' => Planners::AlwaysInTime,
     'first_ride_free' => Planners::FirstRideFree,
     'max_next_score' => Planners::MaxNextScore,
-    'max_next_common_score' => Planners::MaxNextCommonScore
+    'max_next_common_score' => Planners::MaxNextCommonScore,
+    'max_journal_score' => Planners::MaxJournalScore
   }
 
   def initialize(input, planner_name=nil)

@@ -14,10 +14,18 @@ class Clock
     end
   end
 
+  def forward_to(step)
+    @current_step = step
+  end
+
+  def reset
+    @current_step = 0
+  end
+
   private
 
   def inform
-    return unless @current_step % 10000 == 0
+    return unless (@current_step > 0 && @current_step % 10000 == 0)
 
     puts "Still in progress (#{@current_step}/#{@end_of_time}) ..."
   end

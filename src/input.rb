@@ -80,12 +80,12 @@ class Input
   end
 
   def build_ride(id, descriptor)
-    start_x = descriptor[0]
-    start_y = descriptor[1]
-    finish_x = descriptor[2]
-    finish_y = descriptor[3]
-    earliest_start = descriptor[4]
-    latest_finish = descriptor[5]
+    start_x = descriptor[FIRST]
+    start_y = descriptor[SECOND]
+    finish_x = descriptor[THIRD]
+    finish_y = descriptor[FOURTH]
+    earliest_start = descriptor[FIFTH]
+    latest_finish = descriptor[SIXTH]
 
     Ride.new(
       id,

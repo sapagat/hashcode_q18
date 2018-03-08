@@ -1,5 +1,5 @@
 require_relative 'planner'
-require_relative '../wishlist'
+require_relative '../resolver'
 
 module Planners
   class MaxJournalScore < Planner
@@ -22,14 +22,14 @@ module Planners
     end
 
     def assign_best_next_score(vehicle)
-      wishlist = Wishlist.new
+      resolver = Resolver.new
       scored_rides = score_pending_rides(vehicle)
 
       scored_rides.each do |ride, score|
         next if score == 0
-        wishlist.add(ride, vehicle, score)
+        resolver.add(ride, vehicle, score)
       end
-      wishlist.solve
+      resolver.solve
     end
 
     def score_pending_rides(vehicle)

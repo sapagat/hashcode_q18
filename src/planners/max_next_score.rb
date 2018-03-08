@@ -1,5 +1,6 @@
 require_relative '../simulation'
 require_relative 'planner'
+require_relative '../resolver'
 
 module Planners
   class MaxNextScore < Planner
@@ -18,17 +19,17 @@ module Planners
     private
 
     def calculate_best_assignments(vehicle)
-      wishlist = Wishlist.new
-      add_wishes(wishlist, vehicle)
-      wishlist.solve
+      resolver = Resolver.new
+      add_options(resolver, vehicle)
+      resolver.solve
     end
 
-    def add_wishes(wishlist, vehicle)
+    def add_options(resolver, vehicle)
       scored_rides = score_pending_rides(vehicle)
       return unless scored_rides
 
       scored_rides.each do |ride, score|
-        wishlist.add(ride, vehicle, score)
+        resolver.add(ride, vehicle, score)
       end
     end
 

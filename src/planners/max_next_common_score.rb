@@ -1,5 +1,5 @@
 require_relative 'planner'
-require_relative '../wishlist'
+require_relative '../resolver'
 
 module Planners
   class MaxNextCommonScore < Planner
@@ -14,12 +14,12 @@ module Planners
     private
 
     def calculate_best_common_assignments
-      wishlist = Wishlist.new
+      resolver = Resolver.new
       each_free_vehicle do |vehicle|
-        add_wishes(wishlist, vehicle)
+        add_options(resolver, vehicle)
       end
 
-      wishlist.solve
+      resolver.solve
     end
 
     def each_free_vehicle
@@ -30,12 +30,12 @@ module Planners
       end
     end
 
-    def add_wishes(wishlist, vehicle)
+    def add_options(resolver, vehicle)
       scored_rides = score_pending_rides(vehicle)
       return unless scored_rides
 
       scored_rides.each do |ride, score|
-        wishlist.add(ride, vehicle, score)
+        resolver.add(ride, vehicle, score)
       end
     end
 

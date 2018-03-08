@@ -1,17 +1,17 @@
-require_relative '../src/wishlist'
+require_relative '../src/resolver'
 
-describe 'Whishlist' do
+describe 'Resolver' do
   it 'solves rides without conflicts easily' do
     one_ride = double(:ride)
     other_ride = double(:other_ride)
     first_vehicle = a_vehicle
     second_vehicle = a_vehicle
 
-    wishlist = Wishlist.new
-    wishlist.add(one_ride, first_vehicle, any_score)
-    wishlist.add(other_ride, second_vehicle, any_score)
+    resolver = Resolver.new
+    resolver.add(one_ride, first_vehicle, any_score)
+    resolver.add(other_ride, second_vehicle, any_score)
 
-    result = wishlist.solve
+    result = resolver.solve
 
     expect(first_vehicle).to have_received(:assign).with(one_ride)
     expect(second_vehicle).to have_received(:assign).with(other_ride)
@@ -22,11 +22,11 @@ describe 'Whishlist' do
     first_vehicle = a_vehicle
     second_vehicle = a_vehicle
 
-    wishlist = Wishlist.new
-    wishlist.add(the_ride, first_vehicle, 0)
-    wishlist.add(the_ride, second_vehicle, 10)
+    resolver = Resolver.new
+    resolver.add(the_ride, first_vehicle, 0)
+    resolver.add(the_ride, second_vehicle, 10)
 
-    result = wishlist.solve
+    result = resolver.solve
 
     expect(first_vehicle).not_to have_received(:assign).with(the_ride)
     expect(second_vehicle).to have_received(:assign).with(the_ride)
@@ -38,14 +38,14 @@ describe 'Whishlist' do
     first_vehicle = a_vehicle
     second_vehicle = a_vehicle
 
-    wishlist = Wishlist.new
-    wishlist.add(the_ride, first_vehicle, 5)
-    wishlist.add(other_ride, first_vehicle, 5)
+    resolver = Resolver.new
+    resolver.add(the_ride, first_vehicle, 5)
+    resolver.add(other_ride, first_vehicle, 5)
 
-    wishlist.add(the_ride, second_vehicle, 10)
-    wishlist.add(other_ride, second_vehicle, 8)
+    resolver.add(the_ride, second_vehicle, 10)
+    resolver.add(other_ride, second_vehicle, 8)
 
-    result = wishlist.solve
+    result = resolver.solve
 
     expect(second_vehicle).to have_received(:assign).with(the_ride)
     expect(first_vehicle).to have_received(:assign).with(other_ride)

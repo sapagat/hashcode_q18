@@ -9,4 +9,8 @@ class Position
   def distance_to(position)
     (@x - position.x).abs + (@y - position.y).abs
   end
+
+  def ==(other)
+    @x == other.x && @y == other.y
+  end
 end

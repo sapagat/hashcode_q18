@@ -1,13 +1,15 @@
 require_relative 'position'
+require_relative 'vector'
+require_relative 'time_range'
 
 class Ride
-  attr_reader :start, :finish, :id
+  attr_reader :id
 
-  def initialize(start, finish)
-    @start = start
-    @finish = finish
-    @wait_time = 0
+  def initialize(vector, available)
+    @vector = vector
+    @available = available
     @completed = false
+    @disposed = nil
   end
 
   def has_id(id)
@@ -16,22 +18,25 @@ class Ride
 
   def perform(vehicle, start_step)
     assign(vehicle)
-    current_step = start_step
+    lead_time = time_from_vehicle_to_start(vehicle)
+    vehicle_ready = start_step + lead_time
 
-    distance = vehicle.go_to(@start)
-    current_step += distance
+    wait_time = @available.until_being_in_range_from(vehicle_ready)
 
-    wait_time = @start.wait_time(current_step)
-    current_step += wait_time
-    @start.arrived_at(current_step)
+    ride_starts = vehicle_ready + wait_time
 
-    distance = vehicle.go_to(@finish)
-    current_step += distance
-    @finish.arrived_at(current_step)
+    distance = @vector.distance
+    ride_ends = ride_starts + distance
 
-    @completed = true
+    @disposed = TimeRange.new(ride_starts, ride_ends)
+    vehicle.go_to(@vector.term)
 
-    current_step
+    ride_ends
+  end
+
+  def time_from_vehicle_to_start(vehicle)
+    distance = vehicle.go_to(@vector.origin)
+    distance
   end
 
   def assign(vehicle)
@@ -39,7 +44,7 @@ class Ride
   end
 
   def completed?
-    @completed
+    !@disposed.nil?
   end
 
   def unassigned?
@@ -47,68 +52,20 @@ class Ride
   end
 
   def timeless?
-    @start.just_in_time?
+    return false unless @disposed
+
+    @disposed.same_start?(@available)
   end
 
   def finished_in_time?
-    @finish.in_time?
+    @available.contains?(@disposed)
   end
 
   def distance
-    @start.distance_to(@finish)
+    @vector.distance
   end
 
   def finish_step
-    @finish.arrived_step
-  end
-end
-
-class Finish < Position
-  def initialize(x, y, latest_step)
-    @latest_step = latest_step
-
-    super(x, y)
-  end
-
-  def arrived_at(step)
-    @arrived_at = step
-  end
-
-  def in_time?
-    @latest_step >= @arrived_at
-  end
-
-  def arrived_step
-    @arrived_at
-  end
-end
-
-class Start < Position
-  attr_reader :earliest_step
-
-  def initialize(x, y, earliest_step)
-    @earliest_step = earliest_step
-
-    super(x, y)
-  end
-
-  def wait_time(step)
-    return 0 unless too_early?(step)
-
-    @earliest_step - step
-  end
-
-  def arrived_at(step)
-    @arrived_at = step
-  end
-
-  def just_in_time?
-    @arrived_at == @earliest_step
-  end
-
-  private
-
-  def too_early?(step)
-    @earliest_step > step
+    @disposed.finish
   end
 end

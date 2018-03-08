@@ -86,12 +86,14 @@ class Input
     finish_y = descriptor[FOURTH]
     earliest_start = descriptor[FIFTH]
     latest_finish = descriptor[SIXTH]
+    vector = Vector.new(
+      Position.new(start_x, start_y),
+      Position.new(finish_x, finish_y)
+    )
+    available = TimeRange.new(earliest_start, latest_finish)
 
-    ride = Ride.new(
-      Start.new(start_x, start_y, earliest_start),
-      Finish.new(finish_x, finish_y, latest_finish)
-     )
-     ride.has_id(id)
-     ride
+    ride = Ride.new(vector, available)
+    ride.has_id(id)
+    ride
   end
 end

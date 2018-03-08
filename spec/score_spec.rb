@@ -3,10 +3,12 @@ require_relative '../src/score'
 
 describe 'Score' do
   it 'gives points to a ride performed in time' do
-    ride = Ride.new(
-      Start.new(0,0, very_early),
-      Finish.new(1, 1, very_late)
+    vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
     )
+    available = TimeRange.new(very_early, very_late)
+    ride = Ride.new(vector, available)
     ride.perform(a_vehicle, very_early)
 
     scoring = Score.new()
@@ -16,16 +18,20 @@ describe 'Score' do
   end
 
   it 'gives points to multiple rides arrived in time' do
-    first_ride = Ride.new(
-      Start.new(0,0, very_early),
-      Finish.new(1,1, very_late)
+    first_vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
     )
+    first_available = TimeRange.new(very_early, very_late)
+    first_ride = Ride.new(first_vector, first_available)
     first_ride.perform(a_vehicle, very_early)
 
-    second_ride = Ride.new(
-      Start.new(1,1, very_early),
-      Finish.new(2,2, very_late)
+    second_vector = Vector.new(
+      Position.new(1, 1),
+      Position.new(2, 2)
     )
+    second_available = TimeRange.new(very_early, very_late)
+    second_ride = Ride.new(second_vector, second_available)
     second_ride.perform(a_vehicle, early)
 
     scoring = Score.new()
@@ -36,10 +42,12 @@ describe 'Score' do
   end
 
   it 'does not give points to a ride that did not finish in time' do
-    ride = Ride.new(
-      Start.new(0,0, very_early),
-      Finish.new(1, 1, very_early)
+    vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
     )
+    available = TimeRange.new(very_early, very_early)
+    ride = Ride.new(vector, available)
     ride.perform(a_vehicle, very_late)
 
     scoring = Score.new()
@@ -49,14 +57,15 @@ describe 'Score' do
   end
 
   it 'gives extra points if the ride was timeless' do
-    ride = Ride.new(
-      Start.new(0,0, very_early),
-      Finish.new(1, 1, soon)
+    vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
     )
-    bonus = 5
-
+    available = TimeRange.new(very_early, soon)
+    ride = Ride.new(vector, available)
     ride.perform(a_vehicle, very_early)
 
+    bonus = 5
     scoring = Score.new(bonus)
     scoring.add(ride)
 

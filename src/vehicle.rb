@@ -13,7 +13,9 @@ class Vehicle
   def assign(ride)
     return unless ride
 
-    update_availability(ride)
+    ride.mark_as_assigned
+    perform(ride)
+
     @rides << ride
   end
 
@@ -28,11 +30,12 @@ class Vehicle
     distance
   end
 
-  private
-
-  def update_availability(ride)
+  def perform(ride)
     start_step = @free_at
-    finish_step = ride.perform(self, start_step)
+    lead_time = go_to(ride.origin)
+    vehicle_ready = start_step + lead_time
+    finish_step = ride.perform(vehicle_ready)
+    go_to(ride.term)
     @free_at = finish_step
   end
 end

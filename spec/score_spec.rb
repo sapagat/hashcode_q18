@@ -9,7 +9,7 @@ describe 'Score' do
     )
     available = TimeRange.new(very_early, very_late)
     ride = Ride.new(vector, available)
-    ride.perform(a_vehicle, very_early)
+    ride.perform(very_early)
 
     scoring = Score.new()
     scoring.add(ride)
@@ -24,7 +24,7 @@ describe 'Score' do
     )
     first_available = TimeRange.new(very_early, very_late)
     first_ride = Ride.new(first_vector, first_available)
-    first_ride.perform(a_vehicle, very_early)
+    first_ride.perform(very_early)
 
     second_vector = Vector.new(
       Position.new(1, 1),
@@ -32,7 +32,7 @@ describe 'Score' do
     )
     second_available = TimeRange.new(very_early, very_late)
     second_ride = Ride.new(second_vector, second_available)
-    second_ride.perform(a_vehicle, early)
+    second_ride.perform(early)
 
     scoring = Score.new()
     scoring.add(first_ride)
@@ -48,7 +48,7 @@ describe 'Score' do
     )
     available = TimeRange.new(very_early, very_early)
     ride = Ride.new(vector, available)
-    ride.perform(a_vehicle, very_late)
+    ride.perform(very_late)
 
     scoring = Score.new()
     scoring.add(ride)
@@ -63,17 +63,13 @@ describe 'Score' do
     )
     available = TimeRange.new(very_early, soon)
     ride = Ride.new(vector, available)
-    ride.perform(a_vehicle, very_early)
+    ride.perform(very_early)
 
     bonus = 5
     scoring = Score.new(bonus)
     scoring.add(ride)
 
     expect(scoring.total).to eq(bonus + ride.distance)
-  end
-
-  def a_vehicle
-    Vehicle.new
   end
 
   def very_early

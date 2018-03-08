@@ -20,9 +20,5 @@ module Planners
         ride.unassigned?
       end
     end
-
-    def max_distance_time
-      @rows + @columns
-    end
   end
 end

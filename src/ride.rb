@@ -10,17 +10,14 @@ class Ride
     @available = available
     @completed = false
     @disposed = nil
+    @assigned = false
   end
 
   def has_id(id)
     @id = id
   end
 
-  def perform(vehicle, start_step)
-    assign(vehicle)
-    lead_time = time_from_vehicle_to_start(vehicle)
-    vehicle_ready = start_step + lead_time
-
+  def perform(vehicle_ready)
     wait_time = @available.until_being_in_range_from(vehicle_ready)
 
     ride_starts = vehicle_ready + wait_time
@@ -29,18 +26,20 @@ class Ride
     ride_ends = ride_starts + distance
 
     @disposed = TimeRange.new(ride_starts, ride_ends)
-    vehicle.go_to(@vector.term)
 
     ride_ends
   end
 
-  def time_from_vehicle_to_start(vehicle)
-    distance = vehicle.go_to(@vector.origin)
-    distance
+  def origin
+    @vector.origin
   end
 
-  def assign(vehicle)
-    @vehicle = vehicle
+  def term
+    @vector.term
+  end
+
+  def mark_as_assigned
+    @assigned = true
   end
 
   def completed?
@@ -48,17 +47,15 @@ class Ride
   end
 
   def unassigned?
-    !@vehicle
+    !@assigned
   end
 
   def timeless?
-    return false unless @disposed
-
-    @disposed.same_start?(@available)
+    @disposed && @disposed.same_start?(@available)
   end
 
   def finished_in_time?
-    @available.contains?(@disposed)
+    @disposed && @available.contains?(@disposed)
   end
 
   def distance

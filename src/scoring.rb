@@ -58,13 +58,13 @@ class Scoring
 
   def count_pending(rides)
     rides.select do |ride|
-      !ride.completed? || ride.finish_step > max_steps
+      !ride.finished_in_time?
     end.count
   end
 
   def count_with_bonus(rides)
     rides.select do |ride|
-      ride.timeless? && ride.finish_step <= max_steps
+      ride.timeless?
     end.count
   end
 

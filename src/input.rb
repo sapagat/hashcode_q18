@@ -87,10 +87,11 @@ class Input
     earliest_start = descriptor[FIFTH]
     latest_finish = descriptor[SIXTH]
 
-    Ride.new(
-      id,
+    ride = Ride.new(
       Start.new(start_x, start_y, earliest_start),
       Finish.new(finish_x, finish_y, latest_finish)
      )
+     ride.has_id(id)
+     ride
   end
 end

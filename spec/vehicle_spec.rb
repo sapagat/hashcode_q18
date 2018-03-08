@@ -5,7 +5,6 @@ describe 'Vehicle' do
   it 'can make a prevision when it will be free' do
     vehicle = Vehicle.new
     ride = Ride.new(
-    'AN_ID',
      Start.new(0,0, 0),
      Finish.new(1, 1, 3)
      )
@@ -19,7 +18,6 @@ describe 'Vehicle' do
   it 'marks the ride as assigned' do
     vehicle = Vehicle.new
     ride = Ride.new(
-      'AN_ID',
        Start.new(0,0, 0),
        Finish.new(1, 1, 3)
      )
@@ -33,7 +31,6 @@ describe 'Vehicle' do
     start_position = Start.new(0,0, 0)
     finish_position = Finish.new(1, 1, 3)
     ride = Ride.new(
-      'AN_ID',
        start_position,
        finish_position
      )

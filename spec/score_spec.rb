@@ -4,7 +4,6 @@ require_relative '../src/score'
 describe 'Score' do
   it 'gives points to a ride performed in time' do
     ride = Ride.new(
-      id,
       Start.new(0,0, very_early),
       Finish.new(1, 1, very_late)
     )
@@ -18,14 +17,12 @@ describe 'Score' do
 
   it 'gives points to multiple rides arrived in time' do
     first_ride = Ride.new(
-      id,
       Start.new(0,0, very_early),
       Finish.new(1,1, very_late)
     )
     first_ride.perform(a_vehicle, very_early)
 
     second_ride = Ride.new(
-      id,
       Start.new(1,1, very_early),
       Finish.new(2,2, very_late)
     )
@@ -40,7 +37,6 @@ describe 'Score' do
 
   it 'does not give points to a ride that did not finish in time' do
     ride = Ride.new(
-      id,
       Start.new(0,0, very_early),
       Finish.new(1, 1, very_early)
     )
@@ -54,7 +50,6 @@ describe 'Score' do
 
   it 'gives extra points if the ride was timeless' do
     ride = Ride.new(
-      id,
       Start.new(0,0, very_early),
       Finish.new(1, 1, soon)
     )
@@ -86,9 +81,5 @@ describe 'Score' do
 
   def very_late
     5000
-  end
-
-  def id
-    1234
   end
 end

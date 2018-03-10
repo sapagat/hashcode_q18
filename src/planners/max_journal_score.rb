@@ -53,8 +53,6 @@ module Planners
       ride_scores = Simulation.score_rides(
         vehicle,
         rides,
-        @clock.current_step,
-        @max_steps,
         @bonus
       )
       ride_scores

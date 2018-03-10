@@ -10,7 +10,8 @@ describe 'Scoring' do
   end
 
   it 'stops when the number of the steps of the simulation has been reached' do
-    expect(Scoring.new(very_few_steps_input, output).do).to eq(0)
+    score_before_end_of_time = 2
+    expect(Scoring.new(very_few_steps_input, output).do).to eq(score_before_end_of_time)
   end
 
   def input
@@ -24,10 +25,10 @@ describe 'Scoring' do
 
   def very_few_steps_input
     <<~EOF
-3 4 2 3 2 1
-0 0 1 3 2 9
-1 2 1 0 0 9
-2 0 2 2 0 9
+3 4 1 3 2 4
+0 0 1 3 2 4
+1 2 1 0 0 4
+2 0 2 2 0 4
     EOF
   end
 

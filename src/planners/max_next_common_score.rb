@@ -58,12 +58,9 @@ module Planners
     end
 
     def score_rides(vehicle, rides)
-      start_step = @clock.current_step
       ride_scores = Simulation.score_rides(
         vehicle,
         rides,
-        start_step,
-        @max_steps,
         @bonus
       )
       ride_scores

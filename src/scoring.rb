@@ -1,32 +1,31 @@
 require_relative 'input'
 require_relative 'output'
 require_relative 'ride'
+require_relative 'rides'
 require_relative 'vehicle'
-require_relative 'simulation'
+require_relative 'clock'
+require_relative 'score'
 
 class Scoring
   def initialize(input, output)
     @input = Input.new(input)
     @output = Output.new(output)
-    @score = 0
     @rides_pending = 0
     @rides_with_bonus = 0
   end
 
   def do
+    @score = Score.new(@input.bonus)
+
     each_vehicle_rides do |vehicle, rides|
-      simulation = Simulation.new(
-        vehicle,
-        rides,
-        max_steps,
-        bonus
-      )
-      simulation.run
-      score = simulation.score
-      update_metrics(rides, score)
+      rides.each do |ride|
+        vehicle.perform(ride)
+        @score.add(ride)
+      end
+      update_metrics(rides)
     end
 
-    @score
+    @score.total
   end
 
   def statistics
@@ -42,30 +41,18 @@ class Scoring
   def each_vehicle_rides
     @output.vehicle_rides do |_count, rides_indexes|
       vehicle = Vehicle.new
-      rides = rides_indexes.map do |index|
-        @input.ride(index)
+      rides = Rides.new
+      rides_indexes.each do |index|
+        ride = @input.ride(index)
+        rides.add(ride)
       end
-
       yield(vehicle, rides)
     end
   end
 
-  def update_metrics(rides, score)
-    @score += score
-    @rides_pending += count_pending(rides)
-    @rides_with_bonus += count_with_bonus(rides)
-  end
-
-  def count_pending(rides)
-    rides.select do |ride|
-      !ride.finished_in_time?
-    end.count
-  end
-
-  def count_with_bonus(rides)
-    rides.select do |ride|
-      ride.timeless?
-    end.count
+  def update_metrics(rides)
+    @rides_pending += rides.count_pending
+    @rides_with_bonus += rides.count_timeless
   end
 
   def max_steps

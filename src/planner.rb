@@ -30,6 +30,8 @@ class Planner
   private
 
   def assign_rides
+    raise 'Planner not found' unless @strategy_class
+    
     settings = {
       vehicles: vehicles,
       rides: rides,

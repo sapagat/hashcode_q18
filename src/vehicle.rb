@@ -1,4 +1,3 @@
-require_relative 'simulation'
 require_relative 'position'
 
 class Vehicle

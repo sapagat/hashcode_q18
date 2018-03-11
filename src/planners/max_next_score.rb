@@ -1,4 +1,3 @@
-require_relative '../simulation'
 require_relative 'planner'
 require_relative '../resolver'
 
@@ -19,25 +18,13 @@ module Planners
     private
 
     def calculate_best_assignments(vehicle)
-      resolver = Resolver.new
-      add_options(resolver, vehicle)
-      resolver.solve
-    end
-
-    def add_options(resolver, vehicle)
-      scored_rides = score_pending_rides(vehicle)
-      return unless scored_rides
-
-      scored_rides.each do |ride, score|
+      resolver = Resolver.new(@bonus)
+      rides = fetch_pending
+      rides.each do |ride|
+        score = vehicle.score(ride, @bonus)
         resolver.add(ride, vehicle, score)
       end
-    end
-
-    def score_pending_rides(vehicle)
-      rides = fetch_pending
-      return if rides.empty?
-
-      score_rides(vehicle, rides)
+      resolver.solve
     end
 
     def fetch_pending
@@ -49,15 +36,6 @@ module Planners
         break if rides.count == MAX_RIDES_TO_COMPARE
       end
       rides
-    end
-
-    def score_rides(vehicle, rides)
-      ride_scores = Simulation.score_rides(
-        vehicle,
-        rides,
-        @bonus
-      )
-      ride_scores
     end
   end
 end

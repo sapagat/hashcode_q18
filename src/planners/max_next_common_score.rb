@@ -14,9 +14,13 @@ module Planners
     private
 
     def calculate_best_common_assignments
-      resolver = Resolver.new
-      each_free_vehicle do |vehicle|
-        add_options(resolver, vehicle)
+      resolver = Resolver.new(@bonus)
+      rides = fetch_pending
+      rides.each do |ride|
+        each_free_vehicle do |vehicle|
+          score = vehicle.score(ride, @bonus)
+          resolver.add(ride, vehicle, score)
+        end
       end
 
       resolver.solve
@@ -30,22 +34,6 @@ module Planners
       end
     end
 
-    def add_options(resolver, vehicle)
-      scored_rides = score_pending_rides(vehicle)
-      return unless scored_rides
-
-      scored_rides.each do |ride, score|
-        resolver.add(ride, vehicle, score)
-      end
-    end
-
-    def score_pending_rides(vehicle)
-      rides = fetch_pending
-      return if rides.empty?
-
-      score_rides(vehicle, rides)
-    end
-
     def fetch_pending
       rides = []
       @rides.each do |ride|
@@ -55,15 +43,6 @@ module Planners
         break if rides.count == MAX_RIDES_TO_COMPARE
       end
       rides
-    end
-
-    def score_rides(vehicle, rides)
-      ride_scores = Simulation.score_rides(
-        vehicle,
-        rides,
-        @bonus
-      )
-      ride_scores
     end
   end
 end

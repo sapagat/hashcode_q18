@@ -8,7 +8,6 @@ class Ride
   def initialize(vector, available)
     @vector = vector
     @available = available
-    @completed = false
     @disposed = nil
     @assigned = false
   end
@@ -28,6 +27,13 @@ class Ride
     @disposed = TimeRange.new(ride_starts, ride_ends)
 
     ride_ends
+  end
+
+  def score(bonus)
+    score = 0
+    score += distance if finished_in_time?
+    score += bonus if timeless?
+    score
   end
 
   def origin

@@ -33,8 +33,20 @@ class Vehicle
     start_step = @free_at
     lead_time = go_to(ride.origin)
     vehicle_ready = start_step + lead_time
+
     finish_step = ride.perform(vehicle_ready)
+
     go_to(ride.term)
     @free_at = finish_step
+  end
+
+  def score(ride, bonus)
+    lead_time = @position.distance_to(ride.origin)
+    vehicle_ready = @free_at + lead_time
+
+    ride = ride.dup
+    ride.perform(vehicle_ready)
+
+    ride.score(bonus)
   end
 end

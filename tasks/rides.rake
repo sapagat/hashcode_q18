@@ -1,6 +1,6 @@
-require_relative '../src/validation'
-require_relative '../src/scoring'
-require_relative '../src/planner'
+require_relative '../src/commands/validate'
+require_relative '../src/commands/score'
+require_relative '../src/commands/plan'
 
 namespace :rides do
   task :score do
@@ -8,14 +8,14 @@ namespace :rides do
       score = 0
       puts "*" * 25, "Scoring dataset #{name}"
 
-      validation = Validation.for(input, output)
+      validation = Commands::Validate.do(input, output)
 
       puts "#{validation.message}"
 
       validation.result
 
       if validation.result == 'success'
-        score = Scoring.new(input, output).do
+        score = Commands::Score.do(input, output)
       end
 
       puts "#{score} points"
@@ -27,23 +27,24 @@ namespace :rides do
     strategy = args[:strategy]
     total_score = 0
     each_input do |name, input|
+
       score = 0
       puts "*" * 25, "Planning dataset #{name}"
-      output = Planner.new(input, strategy).plan
+      output = Commands::Plan.do(input, strategy)
 
       path = File.join(output_directory, "#{name}.out")
       File.open(path, 'w') do |file|
         file.write(output)
       end
 
-      validation = Validation.for(input, output)
+      validation = Commands::Validate.do(input, output)
 
       puts "#{validation.message}"
 
       validation.result
 
       if validation.result == 'success'
-        scoring = Scoring.new(input, output)
+        scoring = Commands::Score.new(input, output)
         score = scoring.do
         statistics = scoring.statistics
         puts "#{statistics}"

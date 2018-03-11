@@ -28,6 +28,24 @@ describe 'Vehicle' do
     expect(vehicle.position).to eq(term)
   end
 
+  it 'can score a ride without completing it' do
+    vehicle = Vehicle.new
+    ride = a_ride
+
+    score = vehicle.score(ride, any_bonus)
+
+    expect(score).to eq(expected_score)
+    expect(ride.completed?).to eq(false)
+  end
+
+  def any_bonus
+    2
+  end
+
+  def expected_score
+    4
+  end
+
   def a_ride
     vector = Vector.new(
       Position.new(0, 0),

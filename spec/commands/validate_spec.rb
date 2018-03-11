@@ -1,10 +1,10 @@
-require_relative '../src/validation'
+require_relative '../../src/commands/validate'
 
-describe 'Validation' do
+describe 'Validate' do
   it 'passes when the output is correct' do
     output = correct_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('success')
     expect(validation.message).to eq('Validation has passed')
@@ -13,7 +13,7 @@ describe 'Validation' do
   it 'checks the file has enough lines' do
     output = less_lines_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('failure')
     expect(validation.message).to eq('The output file has the wrong number of lines')
@@ -22,7 +22,7 @@ describe 'Validation' do
   it 'checks the file has not too many lines' do
     output = too_many_lines_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('failure')
     expect(validation.message).to eq('The output file has the wrong number of lines')
@@ -31,7 +31,7 @@ describe 'Validation' do
   it 'checks the number of rides assigned to a vehicle' do
     output = rides_mismatch_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('failure')
     expect(validation.message).to eq('Mismatch in the number of rides assigned to a vehicle')
@@ -40,7 +40,7 @@ describe 'Validation' do
   it 'checks the number of total rides has not been exceeded' do
     output = rides_exceeded_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('failure')
     expect(validation.message).to eq('Total rides count has been exceeded')
@@ -49,7 +49,7 @@ describe 'Validation' do
   it 'checks a ride has been assigned only once' do
     output = multiple_assignments_output
 
-    validation = Validation.for(input, output)
+    validation = Commands::Validate.do(input, output)
 
     expect(validation.result).to eq('failure')
     expect(validation.message).to eq('A ride has been assigned more than once')

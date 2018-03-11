@@ -23,39 +23,25 @@ module Planners
 
     def assign_best_next_score(vehicle)
       resolver = Resolver.new
-      scored_rides = score_pending_rides(vehicle)
 
-      scored_rides.each do |ride, score|
+      each_pending_ride do |ride|
+        score = vehicle.score(ride, @bonus)
         next if score == 0
+        
         resolver.add(ride, vehicle, score)
       end
+
       resolver.solve
     end
 
-    def score_pending_rides(vehicle)
-      rides = fetch_pending
-      return [] if rides.empty?
+    private
 
-      score_rides(vehicle, rides)
-    end
-
-    def fetch_pending
-      rides = []
+    def each_pending_ride
       @rides.each do |ride|
         next unless ride.unassigned?
 
-        rides << ride
+        yield(ride)
       end
-      rides
-    end
-
-    def score_rides(vehicle, rides)
-      ride_scores = Simulation.score_rides(
-        vehicle,
-        rides,
-        @bonus
-      )
-      ride_scores
     end
   end
 end

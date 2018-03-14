@@ -9,22 +9,13 @@ require_relative '../planners/max_journal_score'
 
 module Commands
   class Plan
-    STRATEGIES = {
-      nil => Planners::SingleRide,
-      'always_in_time' => Planners::AlwaysInTime,
-      'first_ride_free' => Planners::FirstRideFree,
-      'max_next_score' => Planners::MaxNextScore,
-      'max_next_common_score' => Planners::MaxNextCommonScore,
-      'max_journal_score' => Planners::MaxJournalScore
-    }
-
-    def self.do(input, planner_name=nil)
+    def self.do(input, planner_name)
       new(input, planner_name).plan
     end
 
-    def initialize(input, planner_name=nil)
+    def initialize(input, planner_name)
       @input = Input.new(input)
-      @strategy_class = STRATEGIES[planner_name]
+      @strategy_class = Strategy.planner_for(planner_name)
     end
 
     def plan
@@ -35,7 +26,7 @@ module Commands
     private
 
     def assign_rides
-      raise 'Planner not found' unless @strategy_class
+      puts "Planning with #{@strategy_class}"
 
       settings = {
         vehicles: vehicles,
@@ -74,6 +65,30 @@ module Commands
 
     def vehicles_count
       @input.vehicles_count
+    end
+
+    class Strategy
+      PLANNERS = {
+        'single_ride' => Planners::SingleRide,
+        'always_in_time' => Planners::AlwaysInTime,
+        'first_ride_free' => Planners::FirstRideFree,
+        'max_next_score' => Planners::MaxNextScore,
+        'max_next_common_score' => Planners::MaxNextCommonScore,
+        'max_journal_score' => Planners::MaxJournalScore
+      }
+      class << self
+        def planner_for(name)
+          strategy = PLANNERS[name]
+
+          strategy || default
+        end
+
+        private
+
+        def default
+          Planners::SingleRide
+        end
+      end
     end
   end
 end

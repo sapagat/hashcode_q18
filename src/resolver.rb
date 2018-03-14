@@ -1,7 +1,6 @@
 class Resolver
-  def initialize(bonus=0)
+  def initialize
     @options = []
-    @bonus = bonus
   end
 
   def add(ride, vehicle, score)

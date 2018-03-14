@@ -1,7 +1,6 @@
 require_relative '../input'
 require_relative '../vehicle'
 require_relative '../planners/single_ride'
-require_relative '../planners/always_in_time'
 require_relative '../planners/first_ride_free'
 require_relative '../planners/max_next_score'
 require_relative '../planners/max_next_common_score'
@@ -28,14 +27,14 @@ module Commands
     def assign_rides
       puts "Planning with #{@strategy_class}"
 
-      settings = {
+      settings = Planners::Planner::Settings.new({
         vehicles: vehicles,
         rides: rides,
         max_steps: @input.max_steps,
         rows: @input.grid_rows,
         columns: @input.grid_columns,
         bonus: @input.bonus
-      }
+      })
       strategy = @strategy_class.new(settings)
       strategy.plan
     end
@@ -70,7 +69,6 @@ module Commands
     class Strategy
       PLANNERS = {
         'single_ride' => Planners::SingleRide,
-        'always_in_time' => Planners::AlwaysInTime,
         'first_ride_free' => Planners::FirstRideFree,
         'max_next_score' => Planners::MaxNextScore,
         'max_next_common_score' => Planners::MaxNextCommonScore,

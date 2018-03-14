@@ -1,10 +1,12 @@
-require_relative 'planner'
+require_relative '../planner'
 
 module Planners
   class FirstRideFree < Planner
     def plan
-      @clock.next_step do |step|
-        @vehicles.each do |vehicle|
+      clock = Clock.new(@settings.max_steps)
+
+      clock.next_step do |step|
+        @settings.vehicles.each do |vehicle|
           next unless vehicle.free?(step)
 
           ride = first_ride_free
@@ -16,7 +18,7 @@ module Planners
     private
 
     def first_ride_free
-      @rides.find do |ride|
+      @settings.rides.find do |ride|
         ride.unassigned?
       end
     end

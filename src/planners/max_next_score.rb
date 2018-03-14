@@ -1,4 +1,4 @@
-require_relative 'planner'
+require_relative '../planner'
 require_relative '../resolver'
 
 module Planners
@@ -6,8 +6,8 @@ module Planners
     MAX_RIDES_TO_COMPARE = 5000
 
     def plan
-      @clock.next_step do |step|
-        @vehicles.each do |vehicle|
+      clock.next_step do |step|
+        @settings.vehicles.each do |vehicle|
           next unless vehicle.free?(step)
 
           calculate_best_assignments(vehicle)
@@ -18,10 +18,10 @@ module Planners
     private
 
     def calculate_best_assignments(vehicle)
-      resolver = Resolver.new(@bonus)
+      resolver = Resolver.new
       rides = fetch_pending
       rides.each do |ride|
-        score = vehicle.score(ride, @bonus)
+        score = vehicle.score(ride, @settings.bonus)
         resolver.add(ride, vehicle, score)
       end
       resolver.solve
@@ -29,13 +29,17 @@ module Planners
 
     def fetch_pending
       rides = []
-      @rides.each do |ride|
+      @settings.rides.each do |ride|
         next unless ride.unassigned?
 
         rides << ride
         break if rides.count == MAX_RIDES_TO_COMPARE
       end
       rides
+    end
+
+    def clock
+      @clock ||= Clock.new(@settings.max_steps)
     end
   end
 end

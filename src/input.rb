@@ -1,6 +1,7 @@
 require_relative 'ride'
 require_relative 'vehicle'
 require_relative 'fleet'
+require_relative 'rides'
 
 class Input
   FIRST = 0
@@ -57,14 +58,15 @@ class Input
   def rides
     descriptors = @rows[1..-1]
     index = 0
-    result = []
+    rides = Rides.new
 
     descriptors.each do |descriptor|
-      result << build_ride(index, descriptor)
+      ride = build_ride(index, descriptor)
+      rides.add(ride)
       index += 1
     end
 
-    result
+    rides
   end
 
   private

@@ -1,3 +1,4 @@
+require_relative '../src/vehicle'
 require_relative '../src/fleet'
 
 describe 'Fleet' do
@@ -26,7 +27,7 @@ describe 'Fleet' do
   end
 
   def a_vehicle
-    Vechile.new
+    Vehicle.new
   end
 
   def a_ride

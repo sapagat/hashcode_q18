@@ -5,7 +5,7 @@ module Planners
     def plan
       clock.next_step do
         free_vehicles.each do |vehicle|
-          ride = first_ride_free
+          ride = first_unassigned_ride
           vehicle.assign(ride)
         end
       end
@@ -13,14 +13,16 @@ module Planners
 
     private
 
-    def first_ride_free
-      @settings.rides.find do |ride|
-        ride.unassigned?
-      end
+    def first_unassigned_ride
+      rides.first_unassigned
     end
 
     def free_vehicles
       fleet.free_vehicles_at(clock.current_step)
+    end
+
+    def rides
+      @settings.rides
     end
 
     def fleet

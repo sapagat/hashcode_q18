@@ -17,23 +17,16 @@ module Planners
 
     def calculate_best_assignments(vehicle)
       resolver = Resolver.new
-      rides = fetch_pending
-      rides.each do |ride|
+      unassigned_rides.each do |ride|
         score = vehicle.score(ride, @settings.bonus)
         resolver.add(ride, vehicle, score)
       end
       resolver.solve
     end
 
-    def fetch_pending
-      rides = []
-      @settings.rides.each do |ride|
-        next unless ride.unassigned?
-
-        rides << ride
-        break if rides.count == MAX_RIDES_TO_COMPARE
-      end
-      rides
+    def unassigned_rides
+      all_unassigned = @settings.rides.unassigned
+      all_unassigned.take(MAX_RIDES_TO_COMPARE)
     end
 
     def free_vehicles

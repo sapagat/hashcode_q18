@@ -5,7 +5,7 @@ module Planners
   class SingleRide < Planner
     def plan
       first_vehicle = fleet.first_free_vehicle(INITIAL_STEP)
-      first_ride = rides.first
+      first_ride = rides.first_unassigned
 
       first_vehicle.assign(first_ride)
     end

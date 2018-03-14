@@ -7,6 +7,18 @@ class Rides
     @rides << ride
   end
 
+  def first_unassigned
+    @rides.find do |ride|
+      ride.unassigned?
+    end
+  end
+
+  def unassigned
+    @rides.select do |ride|
+      ride.unassigned?
+    end
+  end
+
   def count_pending
     @rides.select do |ride|
       !ride.finished_in_time?

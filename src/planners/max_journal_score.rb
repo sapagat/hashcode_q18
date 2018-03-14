@@ -24,7 +24,7 @@ module Planners
     def assign_best_next_score(vehicle)
       resolver = Resolver.new
 
-      each_pending_ride do |ride|
+      rides.unassigned.each do |ride|
         score = vehicle.score(ride, @settings.bonus)
         next if score == 0
 
@@ -36,12 +36,12 @@ module Planners
 
     private
 
-    def each_pending_ride
-      @settings.rides.each do |ride|
-        next unless ride.unassigned?
+    def rides_unassigned
+      rides.unassigned
+    end
 
-        yield(ride)
-      end
+    def rides
+      @settings.rides
     end
 
     def fleet

@@ -4,7 +4,7 @@ require_relative '../resolver'
 module Planners
   class MaxJournalScore < Planner
     def plan
-      @settings.vehicles.each do |vehicle|
+      fleet.all.each do |vehicle|
         assign_max_score_journal(vehicle)
       end
     end
@@ -42,6 +42,10 @@ module Planners
 
         yield(ride)
       end
+    end
+
+    def fleet
+      @settings.fleet
     end
 
     def clock

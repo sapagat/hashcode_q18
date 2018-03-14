@@ -28,7 +28,7 @@ module Commands
       puts "Planning with #{@strategy_class}"
 
       settings = Planners::Planner::Settings.new({
-        vehicles: vehicles,
+        fleet: fleet,
         rides: rides,
         max_steps: @input.max_steps,
         rows: @input.grid_rows,
@@ -41,7 +41,7 @@ module Commands
 
     def build_output
       output = ''
-      vehicles.each do |vehicle|
+      fleet.all.each do |vehicle|
         count = vehicle.rides.count
         line = "#{count}"
         if count > 0
@@ -54,16 +54,12 @@ module Commands
       output
     end
 
-    def vehicles
-      @vehicles ||= @input.vehicles
-    end
-
     def rides
       @rides ||= @input.rides
     end
 
-    def vehicles_count
-      @input.vehicles_count
+    def fleet
+      @fleet ||= @input.fleet
     end
 
     class Strategy

@@ -15,8 +15,8 @@ module Planners
         @settings = settings
       end
 
-      def vehicles
-        @settings[:vehicles]
+      def fleet
+        @settings[:fleet]
       end
 
       def rides

@@ -1,5 +1,6 @@
 require_relative 'ride'
 require_relative 'vehicle'
+require_relative 'fleet'
 
 class Input
   FIRST = 0
@@ -20,12 +21,12 @@ class Input
     header[THIRD]
   end
 
-  def vehicles
-    result = []
+  def fleet
+    fleet = Fleet.new
     vehicles_count.times do
-      result << Vehicle.new
+      fleet.add(Vehicle.new)
     end
-    result
+    fleet
   end
 
   def rides_count

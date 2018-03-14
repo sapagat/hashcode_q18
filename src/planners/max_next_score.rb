@@ -7,9 +7,7 @@ module Planners
 
     def plan
       clock.next_step do |step|
-        @settings.vehicles.each do |vehicle|
-          next unless vehicle.free?(step)
-
+        free_vehicles.each do |vehicle|
           calculate_best_assignments(vehicle)
         end
       end
@@ -36,6 +34,11 @@ module Planners
         break if rides.count == MAX_RIDES_TO_COMPARE
       end
       rides
+    end
+
+    def free_vehicles
+      fleet = @settings.fleet
+      fleet.free_vehicles_at(clock.current_step)
     end
 
     def clock

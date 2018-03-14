@@ -17,7 +17,7 @@ module Planners
       resolver = Resolver.new
       rides = fetch_pending
       rides.each do |ride|
-        each_free_vehicle do |vehicle|
+        free_vehicles.each do |vehicle|
           score = vehicle.score(ride, @settings.bonus)
           resolver.add(ride, vehicle, score)
         end
@@ -26,12 +26,9 @@ module Planners
       resolver.solve
     end
 
-    def each_free_vehicle
-      @settings.vehicles.each do |vehicle|
-        next unless vehicle.free?(clock.current_step)
-
-        yield(vehicle)
-      end
+    def free_vehicles
+      fleet = @settings.fleet
+      fleet.free_vehicles_at(clock.current_step)
     end
 
     def fetch_pending

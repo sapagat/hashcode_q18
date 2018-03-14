@@ -3,8 +3,14 @@ class Output
   SECOND = 1
   LAST = -1
 
+  def self.from(path)
+    raw = File.read(path)
+    new(raw)
+  end
+
   def initialize(content)
     @rows = []
+    @raw = content
 
     read(content)
   end
@@ -13,12 +19,22 @@ class Output
     @rows.count
   end
 
+  def to_s
+    @raw
+  end
+
   def vehicle_rides
     @rows.each do |line|
       rides_count = line[FIRST]
       rides = line[SECOND..LAST]
 
       yield(rides_count, rides)
+    end
+  end
+
+  def save_as(path)
+    File.open(path, 'w') do |file|
+      file.write(@raw)
     end
   end
 

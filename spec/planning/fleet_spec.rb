@@ -1,5 +1,5 @@
-require_relative '../src/vehicle'
-require_relative '../src/fleet'
+require_relative '../../src/planning/vehicle'
+require_relative '../../src/planning/fleet'
 
 describe 'Fleet' do
   it 'provides the list of free vehicles' do

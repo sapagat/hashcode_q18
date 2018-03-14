@@ -1,4 +1,4 @@
-require_relative '../src/vehicle'
+require_relative '../../src/planning/vehicle'
 
 describe 'Rides' do
   it 'provides the first ride free' do

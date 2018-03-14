@@ -1,6 +1,4 @@
 require_relative '../validation/checks'
-require_relative '../output'
-require_relative '../input'
 
 module Commands
   class Validate
@@ -16,8 +14,8 @@ module Commands
     end
 
     def initialize(input, output)
-      @input = Input.new(input)
-      @output = Output.new(output)
+      @input = input
+      @output = output
     end
 
     def do
@@ -41,6 +39,10 @@ module Commands
       def result
         'failure'
       end
+
+      def failure?
+        true
+      end
     end
 
     class Success
@@ -50,6 +52,10 @@ module Commands
 
       def message
         'Validation has passed'
+      end
+
+      def failure?
+        false
       end
     end
   end

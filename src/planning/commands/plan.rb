@@ -1,10 +1,11 @@
-require_relative '../input'
 require_relative '../vehicle'
 require_relative '../planners/single_ride'
 require_relative '../planners/first_ride_free'
 require_relative '../planners/max_next_score'
 require_relative '../planners/max_next_common_score'
 require_relative '../planners/max_journal_score'
+require_relative '../planner'
+require_relative '../settings'
 
 module Commands
   class Plan
@@ -13,7 +14,7 @@ module Commands
     end
 
     def initialize(input, planner_name)
-      @input = Input.new(input)
+      @input = input
       @strategy_class = Strategy.planner_for(planner_name)
     end
 
@@ -27,7 +28,7 @@ module Commands
     def assign_rides
       puts "Planning with #{@strategy_class}"
 
-      settings = Planners::Planner::Settings.new({
+      settings = Settings.new({
         fleet: fleet,
         rides: rides,
         max_steps: @input.max_steps,
@@ -50,7 +51,6 @@ module Commands
         end
         output << line + "\n"
       end
-
       output
     end
 

@@ -1,59 +1,42 @@
-require_relative '../src/commands/validate'
-require_relative '../src/commands/score'
-require_relative '../src/commands/plan'
+require_relative '../src/planning'
 
 namespace :rides do
   task :score do
-    each_dataset do |name, input, output|
-      score = 0
-      puts "*" * 25, "Scoring dataset #{name}"
+    total_score = 0
+    input_paths.each do |input_path|
+      dataset_name = dataset_name(input_path)
+      output_path = File.join(output_directory, "#{dataset_name}.out")
+      puts "*" * 25, "Scoring dataset #{dataset_name}"
 
-      validation = Commands::Validate.do(input, output)
+      planning = Planning.new(input_path)
+      planning.had_output(output_path)
 
-      puts "#{validation.message}"
-
-      validation.result
-
-      if validation.result == 'success'
-        score = Commands::Score.do(input, output)
-      end
-
-      puts "#{score} points"
+      puts "#{planning.statistics}", "#{planning.score} points"
+      total_score += planning.score
     end
-    puts "*" * 25
+    puts "*" * 25, "Total points: #{total_score}"
   end
 
   task :plan, [:strategy] do |t, args|
     strategy = args[:strategy]
     total_score = 0
-    each_input do |name, input|
-
+    input_paths.each do |input_path|
       score = 0
-      puts "*" * 25, "Planning dataset #{name}"
-      output = Commands::Plan.do(input, strategy)
+      dataset_name = dataset_name(input_path)
+      output_path = File.join(output_directory, "#{dataset_name}.out")
+      puts "*" * 25, "Planning dataset #{dataset_name}"
 
-      path = File.join(output_directory, "#{name}.out")
-      File.open(path, 'w') do |file|
-        file.write(output)
-      end
+      planning = Planning.new(input_path)
+      planning.plan_by(strategy)
+      planning.output_to(output_path)
 
-      validation = Commands::Validate.do(input, output)
-
-      puts "#{validation.message}"
-
-      validation.result
-
-      if validation.result == 'success'
-        scoring = Commands::Score.new(input, output)
-        score = scoring.do
-        statistics = scoring.statistics
-        puts "#{statistics}"
-      end
-
+      score = planning.score
+      statistics = planning.statistics
+      puts "#{statistics}"
       puts "#{score} points"
       total_score += score
     end
-      puts "*" * 25, "Total points: #{total_score}"
+    puts "*" * 25, "Total points: #{total_score}"
   end
 
   def output_path_for(dataset_name)
@@ -62,31 +45,6 @@ namespace :rides do
 
   def dataset_name(input_path)
     input_path.split('/')[-1].sub('.in', '')
-  end
-
-  def read_content(path)
-    File.read(path)
-  end
-
-  def each_dataset
-    input_paths.each do |input_path|
-      dataset_name = dataset_name(input_path)
-      output_path = output_path_for(dataset_name)
-
-      input = read_content(input_path)
-      output = read_content(output_path)
-
-      yield(dataset_name, input, output)
-    end
-  end
-
-  def each_input
-    input_paths.each do |input_path|
-      dataset_name = dataset_name(input_path)
-      input = read_content(input_path)
-
-      yield(dataset_name, input)
-    end
   end
 
   def input_paths

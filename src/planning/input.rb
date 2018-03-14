@@ -12,6 +12,11 @@ class Input
   SIXTH = 5
   HEADER_OFFSET = 1
 
+  def self.from(path)
+    raw = File.read(path)
+    new(raw)
+  end
+
   def initialize(content)
     @rows = []
 

@@ -1,5 +1,6 @@
 require_relative '../planner'
 require_relative '../resolver'
+require_relative '../clock'
 
 module Planners
   class MaxNextScore < Planner

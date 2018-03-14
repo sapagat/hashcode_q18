@@ -1,4 +1,4 @@
-require_relative '../src/resolver'
+require_relative '../../src/planning/resolver'
 
 describe 'Resolver' do
   it 'solves rides without conflicts easily' do

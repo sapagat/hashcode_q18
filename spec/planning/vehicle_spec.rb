@@ -1,5 +1,5 @@
-require_relative '../src/vehicle'
-require_relative '../src/ride'
+require_relative '../../src/planning/vehicle'
+require_relative '../../src/planning/ride'
 
 describe 'Vehicle' do
   it 'can make a prevision when it will be free' do

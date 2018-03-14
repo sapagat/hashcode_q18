@@ -1,9 +1,5 @@
-require_relative '../input'
-require_relative '../output'
-require_relative '../ride'
 require_relative '../rides'
 require_relative '../vehicle'
-require_relative '../clock'
 
 module Commands
   class Score
@@ -12,8 +8,8 @@ module Commands
     end
 
     def initialize(input, output)
-      @input = Input.new(input)
-      @output = Output.new(output)
+      @input = input
+      @output = output
       @rides_pending = 0
       @rides_with_bonus = 0
       @score = 0

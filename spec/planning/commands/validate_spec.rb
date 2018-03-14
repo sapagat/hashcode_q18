@@ -1,4 +1,4 @@
-require_relative '../../src/commands/validate'
+require_relative '../../../src/planning/commands/validate'
 
 describe 'Validate' do
   it 'passes when the output is correct' do
@@ -57,33 +57,37 @@ describe 'Validate' do
 
 
   def input
-    <<~EOF
-3 4 2 3 2 10
-0 0 1 3 2 9
-1 2 1 0 0 9
-2 0 2 2 0 9
-    EOF
+    raw = <<~EOF
+          3 4 2 3 2 10
+          0 0 1 3 2 9
+          1 2 1 0 0 9
+          2 0 2 2 0 9
+          EOF
+    Input.new(raw)
   end
 
   def less_lines_output
-    <<~EOF
-1 0
-    EOF
+    raw = <<~EOF
+          1 0
+          EOF
+    Output.new(raw)
   end
 
   def too_many_lines_output
-    <<~EOF
-1 0
-1 1
-1 2
-    EOF
+    raw = <<~EOF
+          1 0
+          1 1
+          1 2
+          EOF
+    Output.new(raw)
   end
 
   def correct_output
-    <<~EOF
-1 0
-2 2 1
-    EOF
+    raw = <<~EOF
+          1 0
+          2 2 1
+          EOF
+    Output.new(raw)
   end
 
   def expected_score
@@ -91,23 +95,26 @@ describe 'Validate' do
   end
 
   def rides_mismatch_output
-    <<~EOF
-1 0 1
-2 2 1
-    EOF
+    raw = <<~EOF
+          1 0 1
+          2 2 1
+          EOF
+    Output.new(raw)
   end
 
   def rides_exceeded_output
-    <<~EOF
-2 0 1
-2 2 1
-    EOF
+    raw = <<~EOF
+          2 0 1
+          2 2 1
+          EOF
+    Output.new(raw)
   end
 
   def multiple_assignments_output
-    <<~EOF
-1 0
-2 2 0
-    EOF
+    raw = <<~EOF
+          1 0
+          2 2 0
+          EOF
+    Output.new(raw)
   end
 end

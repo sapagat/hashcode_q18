@@ -1,5 +1,5 @@
-require_relative '../src/vehicle'
-require_relative '../src/ride'
+require_relative '../../src/planning/vehicle'
+require_relative '../../src/planning/ride'
 
 describe 'Ride' do
   it 'predicts the finish based on the start' do

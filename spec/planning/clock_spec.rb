@@ -1,4 +1,4 @@
-require_relative '../src/clock'
+require_relative '../../src/planning/clock'
 
 describe 'Clock' do
   it 'iterates until reached a maximum' do

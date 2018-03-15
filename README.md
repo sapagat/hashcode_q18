@@ -39,7 +39,7 @@ You can run a plan as follows:
 bundle exec rake rides:plan[<name>]
 ```
 
-The plans are registered in `src/planner`.
+The plans are registered in `src/planning/planner`.
 
 The plan record is for `max_journal_score` planner:
 

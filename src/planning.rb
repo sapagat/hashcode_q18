@@ -12,8 +12,7 @@ class Planning
   end
 
   def plan_by(strategy_name)
-    raw_output = Commands::Plan.do(@input, strategy_name)
-    @output = Output.new(raw_output)
+    @output = Commands::Plan.do(@input, strategy_name)
   end
 
   def score
@@ -30,7 +29,7 @@ class Planning
   end
 
   def had_output(path)
-    @output = Output.from(path)
+    @output = Output.from_file(path)
   end
 
   private

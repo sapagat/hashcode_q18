@@ -1,7 +1,7 @@
 require_relative 'position'
 
 class Vehicle
-  attr_reader :rides, :position, :free_at
+  attr_reader :position, :free_at
 
   def initialize
     @position = Position.new(0, 0)
@@ -27,6 +27,14 @@ class Vehicle
     @position = other_position
 
     distance
+  end
+
+  def total_assignments
+    @rides.count
+  end
+
+  def ride_ids
+    @rides.map(&:id)
   end
 
   def perform(ride)

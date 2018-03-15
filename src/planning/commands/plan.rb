@@ -6,6 +6,7 @@ require_relative '../planners/max_next_common_score'
 require_relative '../planners/max_journal_score'
 require_relative '../planner'
 require_relative '../settings'
+require_relative '../output'
 
 module Commands
   class Plan
@@ -28,7 +29,12 @@ module Commands
     def assign_rides
       puts "Planning with #{@strategy_class}"
 
-      settings = Settings.new({
+      strategy = @strategy_class.new(settings)
+      strategy.plan
+    end
+
+    def settings
+      Settings.new({
         fleet: fleet,
         rides: rides,
         max_steps: @input.max_steps,
@@ -36,22 +42,10 @@ module Commands
         columns: @input.grid_columns,
         bonus: @input.bonus
       })
-      strategy = @strategy_class.new(settings)
-      strategy.plan
     end
 
     def build_output
-      output = ''
-      fleet.all.each do |vehicle|
-        count = vehicle.rides.count
-        line = "#{count}"
-        if count > 0
-          rides_list = vehicle.rides.map(&:id).join(' ')
-          line += " #{rides_list}"
-        end
-        output << line + "\n"
-      end
-      output
+      Output.from_fleet(fleet)
     end
 
     def rides

@@ -26,17 +26,20 @@ describe 'Rides' do
       Position.new(0, 0),
       Position.new(1, 1)
     )
-    available = TimeRange.new(0, 3)
     Ride.new(vector, available)
   end
 
   def an_assigned_ride
     ride = a_ride
-    ride.mark_as_assigned
+    ride.execute_at(available.start)
     ride
   end
 
   def an_unassigned_ride
     a_ride
+  end
+
+  def available
+    TimeRange.new(0, 3)
   end
 end

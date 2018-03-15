@@ -8,7 +8,7 @@ module Planners
 
     def plan
       clock.next_step do |step|
-        free_vehicles.each do |vehicle|
+        fleet.process_free_vehicles(step) do |vehicle|
           calculate_best_assignments(vehicle)
         end
       end
@@ -38,6 +38,10 @@ module Planners
     def free_vehicles
       fleet = @settings.fleet
       fleet.free_vehicles_at(clock.current_step)
+    end
+
+    def fleet
+      @settings.fleet
     end
 
     def clock

@@ -15,21 +15,35 @@ class Budget
   private
 
   def simulate_ride
-    ride = @ride.dup
-    ride.perform(ready)
-    ride
+    @ride.simulate(vehicle_ready)
   end
 
   def compute_score(ride, bonus)
-    score = 0
-    score += ride.distance if ride.finished_in_time?
-    score += bonus if ride.timeless?
-    score
+    distance_points = distance_points(ride)
+    bonus_points = bonus_points(ride, bonus)
+
+    distance_points + bonus_points
   end
 
-  def ready
-    lead_time = @origin.distance_to(@ride.origin)
+  def distance_points(ride)
+    return 0 unless ride.finished_in_time?
 
-    @start + lead_time
+    ride.mileage
+  end
+
+  def bonus_points(ride, bonus)
+    return 0 unless ride.timeless?
+
+    bonus
+  end
+
+  def vehicle_ready
+    lead_distance = @ride.distance_to(@origin)
+
+    @start + calculate_cost(lead_distance)
+  end
+
+  def calculate_cost(distance)
+    distance
   end
 end

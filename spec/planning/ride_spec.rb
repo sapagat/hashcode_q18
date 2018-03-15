@@ -10,9 +10,9 @@ describe 'Ride' do
     available = TimeRange.new(0, 3)
     ride = Ride.new(vector, available)
     start_step = 1
-    finish_step = ride.perform(start_step)
+    result = ride.execute_at(start_step)
 
-    expect(finish_step).to eq(start_step + vector.distance)
+    expect(result[:step]).to eq(start_step + vector.distance)
   end
 
   it 'waits until the earliest start has been reached' do
@@ -23,10 +23,23 @@ describe 'Ride' do
     available = TimeRange.new(2, 5)
     ride = Ride.new(vector, available)
     start_step = 0
-    ride.perform(start_step)
+    result = ride.execute_at(start_step)
 
     wait_time = 2
-    expect(ride.finish_step).to eq(start_step + wait_time + vector.distance)
+    expect(result[:step]).to eq(start_step + wait_time + vector.distance)
+  end
+
+  it 'does not assigned the ride on a simulation' do
+    vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
+    )
+    available = TimeRange.new(2, 5)
+    ride = Ride.new(vector, available)
+    start_step = 0
+    ride.simulate(start_step)
+
+    expect(ride.unassigned?).to eq(true)
   end
 
   def a_bonus

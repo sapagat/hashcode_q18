@@ -5,7 +5,7 @@ require_relative '../clock'
 module Planners
   class MaxJournalScore < Planner
     def plan
-      fleet.all.each do |vehicle|
+      fleet.process do |vehicle|
         assign_max_score_journal(vehicle)
       end
     end
@@ -27,9 +27,7 @@ module Planners
 
       rides.unassigned.each do |ride|
         score = score_ride(vehicle, ride)
-        next if score == 0
-
-        resolver.add(ride, vehicle, score)
+        resolver.add(ride, vehicle, score) unless score == 0
       end
 
       resolver.solve

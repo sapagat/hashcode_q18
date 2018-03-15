@@ -35,7 +35,6 @@ describe 'Vehicle' do
     budget = vehicle.budget(ride)
 
     expect(budget.score(any_bonus)).to eq(expected_score)
-    expect(ride.completed?).to eq(false)
   end
 
   def any_bonus

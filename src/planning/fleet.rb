@@ -13,8 +13,20 @@ class Fleet
     end
   end
 
+  def process_free_vehicles(step)
+    free_vehicles_at(step).each do |vehicle|
+      yield(vehicle)
+    end
+  end
+
   def all
     @vehicles
+  end
+
+  def process
+    @vehicles.each do |vehicle|
+      yield(vehicle)
+    end
   end
 
   def first_free_vehicle(step)

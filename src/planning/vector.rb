@@ -9,4 +9,8 @@ class Vector
   def distance
     @origin.distance_to(@term)
   end
+
+  def distance_from_origin_to(position)
+    @origin.distance_to(position)
+  end
 end

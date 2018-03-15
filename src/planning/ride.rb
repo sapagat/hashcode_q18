@@ -8,60 +8,58 @@ class Ride
   def initialize(vector, available)
     @vector = vector
     @available = available
-    @disposed = nil
-    @assigned = false
+    @disposed = TimeRange.as_null
   end
 
   def has_id(id)
     @id = id
   end
 
-  def perform(vehicle_ready)
-    wait_time = @available.until_being_in_range_from(vehicle_ready)
+  def execute_at(initial_step)
+    start = initial_step + wait_time(initial_step)
+    finish = start + distance_cost
 
-    ride_starts = vehicle_ready + wait_time
+    @disposed = TimeRange.new(start, finish)
 
-    distance = @vector.distance
-    ride_ends = ride_starts + distance
-
-    @disposed = TimeRange.new(ride_starts, ride_ends)
-
-    ride_ends
+    {
+      step: @disposed.finish,
+      position: @vector.term
+    }
   end
 
-  def origin
-    @vector.origin
-  end
-
-  def term
-    @vector.term
-  end
-
-  def mark_as_assigned
-    @assigned = true
-  end
-
-  def completed?
-    !@disposed.nil?
+  def simulate(initial_step)
+    copy = self.dup
+    copy.execute_at(initial_step)
+    copy
   end
 
   def unassigned?
-    !@assigned
+    @disposed.nil?
   end
 
   def timeless?
-    @disposed && @disposed.same_start?(@available)
+    @disposed.same_start?(@available)
   end
 
   def finished_in_time?
-    @disposed && @available.contains?(@disposed)
+    @available.contains?(@disposed)
   end
 
-  def distance
+  def mileage
     @vector.distance
   end
 
-  def finish_step
-    @disposed.finish
+  def distance_to(position)
+    @vector.distance_from_origin_to(position)
+  end
+
+  private
+
+  def wait_time(step)
+    @available.until_being_in_range_from(step)
+  end
+
+  def distance_cost
+    mileage
   end
 end

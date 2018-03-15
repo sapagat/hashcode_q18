@@ -3,7 +3,7 @@ require_relative '../../src/planning/ride'
 
 describe 'Vehicle' do
   it 'can make a prevision when it will be free' do
-    vehicle = Vehicle.new
+    vehicle = Vehicle.at_garage
 
     vehicle.assign(a_ride)
 
@@ -12,7 +12,7 @@ describe 'Vehicle' do
   end
 
   it 'marks the ride as assigned' do
-    vehicle = Vehicle.new
+    vehicle = Vehicle.at_garage
     ride = a_ride
 
     vehicle.assign(ride)
@@ -21,20 +21,20 @@ describe 'Vehicle' do
   end
 
   it 'chages position once a ride has been assigned' do
-    vehicle = Vehicle.new
+    vehicle = Vehicle.at_garage
 
     vehicle.assign(a_ride)
 
     expect(vehicle.position).to eq(term)
   end
 
-  it 'can score a ride without completing it' do
-    vehicle = Vehicle.new
+  it 'can budget a ride' do
+    vehicle = Vehicle.at_garage
     ride = a_ride
 
-    score = vehicle.score(ride, any_bonus)
+    budget = vehicle.budget(ride)
 
-    expect(score).to eq(expected_score)
+    expect(budget.score(any_bonus)).to eq(expected_score)
     expect(ride.completed?).to eq(false)
   end
 

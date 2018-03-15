@@ -26,7 +26,7 @@ module Planners
       resolver = Resolver.new
 
       rides.unassigned.each do |ride|
-        score = vehicle.score(ride, @settings.bonus)
+        score = score_ride(vehicle, ride)
         next if score == 0
 
         resolver.add(ride, vehicle, score)
@@ -36,6 +36,11 @@ module Planners
     end
 
     private
+
+    def score_ride(vehicle, ride)
+      budget = vehicle.budget(ride)
+      budget.score(@settings.bonus)
+    end
 
     def rides_unassigned
       rides.unassigned

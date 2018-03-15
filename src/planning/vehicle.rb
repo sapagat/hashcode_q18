@@ -1,10 +1,17 @@
 require_relative 'position'
+require_relative 'budget'
 
 class Vehicle
+  GARAGE_POSITION = Position.new(0, 0)
+
   attr_reader :position, :free_at
 
-  def initialize
-    @position = Position.new(0, 0)
+  def self.at_garage
+    new(GARAGE_POSITION)
+  end
+
+  def initialize(position)
+    @position = position
     @rides = []
     @free_at = 0
   end
@@ -48,13 +55,9 @@ class Vehicle
     @free_at = finish_step
   end
 
-  def score(ride, bonus)
-    lead_time = @position.distance_to(ride.origin)
-    vehicle_ready = @free_at + lead_time
-
-    ride = ride.dup
-    ride.perform(vehicle_ready)
-
-    ride.score(bonus)
+  def budget(ride)
+    budget = Budget.new(ride)
+    budget.at_scenario(@position, @free_at)
+    budget
   end
 end

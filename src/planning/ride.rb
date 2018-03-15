@@ -29,13 +29,6 @@ class Ride
     ride_ends
   end
 
-  def score(bonus)
-    score = 0
-    score += distance if finished_in_time?
-    score += bonus if timeless?
-    score
-  end
-
   def origin
     @vector.origin
   end

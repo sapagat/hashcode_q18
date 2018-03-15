@@ -30,7 +30,7 @@ class Input
   def fleet
     fleet = Fleet.new
     vehicles_count.times do
-      fleet.add(Vehicle.new)
+      fleet.add(Vehicle.at_garage)
     end
     fleet
   end

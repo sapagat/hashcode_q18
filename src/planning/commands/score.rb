@@ -18,8 +18,11 @@ module Commands
     def do
       each_vehicle_rides do |vehicle, rides|
         rides.each do |ride|
+          budget = vehicle.budget(ride)
+          
           vehicle.perform(ride)
-          @score += ride.score(bonus)
+
+          @score += budget.score(bonus)
         end
         update_metrics(rides)
       end
@@ -39,7 +42,7 @@ module Commands
 
     def each_vehicle_rides
       @output.vehicle_rides do |_count, rides_indexes|
-        vehicle = Vehicle.new
+        vehicle = Vehicle.at_garage
         rides = Rides.new
         rides_indexes.each do |index|
           ride = @input.ride(index)

@@ -27,7 +27,7 @@ describe 'Fleet' do
   end
 
   def a_vehicle
-    Vehicle.new
+    Vehicle.at_garage
   end
 
   def a_ride

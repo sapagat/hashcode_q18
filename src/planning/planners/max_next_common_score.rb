@@ -18,12 +18,17 @@ module Planners
       resolver = Resolver.new
       unassigned_rides.each do |ride|
         free_vehicles.each do |vehicle|
-          score = vehicle.score(ride, @settings.bonus)
+          score = score_ride(vehicle, ride)
           resolver.add(ride, vehicle, score)
         end
       end
 
       resolver.solve
+    end
+
+    def score_ride(vehicle, ride)
+      budget = vehicle.budget(ride)
+      budget.score(@settings.bonus)
     end
 
     def free_vehicles

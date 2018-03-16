@@ -21,17 +21,5 @@ module Planners
     def free_vehicles
       fleet.free_vehicles_at(clock.current_step)
     end
-
-    def rides
-      @settings.rides
-    end
-
-    def fleet
-      @settings.fleet
-    end
-
-    def clock
-      @clock ||= Clock.new(@settings.max_steps)
-    end
   end
 end

@@ -9,15 +9,5 @@ module Planners
 
       first_vehicle.assign(first_ride)
     end
-
-    private
-
-    def rides
-      @settings.rides
-    end
-
-    def fleet
-      @settings.fleet
-    end
   end
 end

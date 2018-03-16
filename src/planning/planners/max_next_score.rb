@@ -27,25 +27,16 @@ module Planners
 
     def score_ride(vehicle, ride)
       budget = vehicle.budget(ride)
-      budget.score(@settings.bonus)
+      budget.score(bonus)
     end
 
     def unassigned_rides
-      all_unassigned = @settings.rides.unassigned
+      all_unassigned = rides.unassigned
       all_unassigned.take(MAX_RIDES_TO_COMPARE)
     end
 
     def free_vehicles
-      fleet = @settings.fleet
       fleet.free_vehicles_at(clock.current_step)
-    end
-
-    def fleet
-      @settings.fleet
-    end
-
-    def clock
-      @clock ||= Clock.new(@settings.max_steps)
     end
   end
 end

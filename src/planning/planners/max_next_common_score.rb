@@ -8,16 +8,16 @@ module Planners
 
     def plan
       clock.next_step do |step|
-        calculate_best_common_assignments
+        calculate_best_common_assignments(step)
       end
     end
 
     private
 
-    def calculate_best_common_assignments
+    def calculate_best_common_assignments(step)
       resolver = Resolver.new
       unassigned_rides.each do |ride|
-        free_vehicles.each do |vehicle|
+        fleet.process_free_vehicles(step) do |vehicle|
           score = score_ride(vehicle, ride)
           resolver.add(ride, vehicle, score)
         end
@@ -29,10 +29,6 @@ module Planners
     def score_ride(vehicle, ride)
       budget = vehicle.budget(ride)
       budget.score(bonus)
-    end
-
-    def free_vehicles
-      fleet.free_vehicles_at(clock.current_step)
     end
 
     def unassigned_rides

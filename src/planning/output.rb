@@ -10,7 +10,7 @@ class Output
 
   def self.from_fleet(fleet)
     output = new
-    fleet.all.each do |vehicle|
+    fleet.process do |vehicle|
       output.add_vehicle(vehicle)
     end
     output

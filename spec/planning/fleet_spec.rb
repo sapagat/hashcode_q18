@@ -11,8 +11,13 @@ describe 'Fleet' do
     fleet.add(busy_vehicle)
     step = 1
 
-    expect(fleet.free_vehicles_at(step)).to include(free_vehicle)
-    expect(fleet.free_vehicles_at(step)).not_to include(busy_vehicle)
+    processed = []
+    fleet.process_free_vehicles(step) do |vehicle|
+      processed << vehicle
+    end
+
+    expect(processed).to include(free_vehicle)
+    expect(processed).not_to include(busy_vehicle)
   end
 
   it 'provides the first vehicle free available' do

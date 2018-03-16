@@ -7,20 +7,10 @@ class Fleet
     @vehicles << vehicle
   end
 
-  def free_vehicles_at(step)
-    @vehicles.select do |vehicle|
-      vehicle.free?(step)
-    end
-  end
-
   def process_free_vehicles(step)
     free_vehicles_at(step).each do |vehicle|
       yield(vehicle)
     end
-  end
-
-  def all
-    @vehicles
   end
 
   def process
@@ -31,6 +21,14 @@ class Fleet
 
   def first_free_vehicle(step)
     @vehicles.find do |vehicle|
+      vehicle.free?(step)
+    end
+  end
+
+  private
+
+  def free_vehicles_at(step)
+    @vehicles.select do |vehicle|
       vehicle.free?(step)
     end
   end

@@ -4,22 +4,22 @@ require_relative '../clock'
 module Planners
   class FirstRideFree < Planner
     def plan
-      clock.next_step do
-        free_vehicles.each do |vehicle|
-          ride = first_unassigned_ride
-          vehicle.assign(ride)
-        end
+      clock.next_step do |step|
+        make_assignments(step)
       end
     end
 
     private
 
-    def first_unassigned_ride
-      rides.first_unassigned
+    def make_assignments(step)
+      fleet.process_free_vehicles(step) do |vehicle|
+        ride = first_unassigned_ride
+        vehicle.assign(ride)
+      end
     end
 
-    def free_vehicles
-      fleet.free_vehicles_at(clock.current_step)
+    def first_unassigned_ride
+      rides.first_unassigned
     end
   end
 end

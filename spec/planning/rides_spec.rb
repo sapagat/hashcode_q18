@@ -18,7 +18,7 @@ describe 'Rides' do
     rides.add(an_unassigned_ride)
     rides.add(an_unassigned_ride)
 
-    expect(rides.unassigned.count).to eq(2)
+    expect(rides.count_pending).to eq(2)
   end
 
   def a_ride

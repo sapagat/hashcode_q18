@@ -17,9 +17,9 @@ module Commands
 
     def do
       each_vehicle_rides do |vehicle, rides|
-        rides.each do |ride|
+        rides.process do |ride|
           budget = vehicle.budget(ride)
-          
+
           vehicle.perform(ride)
 
           @score += budget.score(bonus)

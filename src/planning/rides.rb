@@ -13,9 +13,16 @@ class Rides
     end
   end
 
-  def unassigned
-    @rides.select do |ride|
-      ride.unassigned?
+  def process_unassigned
+    unassigned.each do |ride|
+      yield(ride)
+    end
+  end
+
+  def process_unassigned_max(limit)
+    rides = unassigned
+    rides.take(limit).each do |ride|
+      yield(ride)
     end
   end
 
@@ -31,9 +38,17 @@ class Rides
     end.count
   end
 
-  def each
+  def process
     @rides.each do |ride|
       yield(ride)
+    end
+  end
+
+  private
+
+  def unassigned
+    @rides.select do |ride|
+      ride.unassigned?
     end
   end
 end

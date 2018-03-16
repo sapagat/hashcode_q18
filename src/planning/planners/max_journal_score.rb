@@ -25,7 +25,7 @@ module Planners
     def assign_best_next_score(vehicle)
       resolver = Resolver.new
 
-      rides.unassigned.each do |ride|
+      rides.process_unassigned do |ride|
         score = score_ride(vehicle, ride)
         resolver.add(ride, vehicle, score) unless score == 0
       end
@@ -38,10 +38,6 @@ module Planners
     def score_ride(vehicle, ride)
       budget = vehicle.budget(ride)
       budget.score(bonus)
-    end
-
-    def rides_unassigned
-      rides.unassigned
     end
   end
 end

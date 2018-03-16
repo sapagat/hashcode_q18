@@ -16,7 +16,7 @@ module Planners
 
     def calculate_best_common_assignments(step)
       resolver = Resolver.new
-      unassigned_rides.each do |ride|
+      rides.process_unassigned_max(MAX_RIDES_TO_COMPARE) do |ride|
         fleet.process_free_vehicles(step) do |vehicle|
           score = score_ride(vehicle, ride)
           resolver.add(ride, vehicle, score)
@@ -29,11 +29,6 @@ module Planners
     def score_ride(vehicle, ride)
       budget = vehicle.budget(ride)
       budget.score(bonus)
-    end
-
-    def unassigned_rides
-      all_unassigned = rides.unassigned
-      all_unassigned.take(MAX_RIDES_TO_COMPARE)
     end
   end
 end

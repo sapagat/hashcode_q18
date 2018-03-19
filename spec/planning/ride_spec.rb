@@ -42,6 +42,19 @@ describe 'Ride' do
     expect(ride.unassigned?).to eq(true)
   end
 
+  it 'knows when a it can be achieved in time' do
+    vector = Vector.new(
+      Position.new(0, 0),
+      Position.new(1, 1)
+    )
+    available = TimeRange.new(2, 5)
+    ride = Ride.new(vector, available)
+
+    expect(ride.achievable?(Position.new(0,0), 1)).to eq(true)
+    expect(ride.achievable?(Position.new(0,0), 7)).to eq(false)
+    expect(ride.achievable?(Position.new(3,3), 5)).to eq(false)
+  end
+
   def a_bonus
     2
   end

@@ -1,38 +1,26 @@
 class Budget
-  def initialize(ride)
-    @ride = ride
-  end
+  attr_reader :ride
 
-  def at_scenario(origin, start)
+  def initialize(ride, origin, start)
+    @ride = ride
     @origin = origin
     @start = start
   end
 
   def score(bonus)
-    compute_score(simulate_ride, bonus)
+    distance_points + bonus_points(bonus)
   end
 
   private
 
-  def simulate_ride
-    @ride.simulate(vehicle_ready)
+  def distance_points
+    return 0 unless simulated_ride.finished_in_time?
+
+    simulated_ride.mileage
   end
 
-  def compute_score(ride, bonus)
-    distance_points = distance_points(ride)
-    bonus_points = bonus_points(ride, bonus)
-
-    distance_points + bonus_points
-  end
-
-  def distance_points(ride)
-    return 0 unless ride.finished_in_time?
-
-    ride.mileage
-  end
-
-  def bonus_points(ride, bonus)
-    return 0 unless ride.timeless?
+  def bonus_points(bonus)
+    return 0 unless simulated_ride.timeless?
 
     bonus
   end
@@ -45,5 +33,9 @@ class Budget
 
   def calculate_cost(distance)
     distance
+  end
+
+  def simulated_ride
+    @simulated_ride ||= @ride.simulate(vehicle_ready)
   end
 end

@@ -1,43 +1,39 @@
 require_relative '../planner'
-require_relative '../resolver'
-require_relative '../clock'
+require_relative '../budgets'
 
 module Planners
   class MaxJournalScore < Planner
     def plan
       fleet.process do |vehicle|
-        assign_max_score_journal(vehicle)
+        assign_journal(vehicle)
       end
     end
 
     private
 
-    def assign_max_score_journal(vehicle)
-      clock.reset
-      clock.next_step do |step|
-        assign_best_next_score(vehicle)
-
-        break if vehicle.free?(step)
-        clock.forward_to(vehicle.free_at - 1)
+    def assign_journal(vehicle)
+      while(any_ride_achievable?(vehicle)) do
+        assign_best_ride(vehicle)
       end
     end
 
-    def assign_best_next_score(vehicle)
-      resolver = Resolver.new
-
-      rides.process_unassigned do |ride|
-        score = score_ride(vehicle, ride)
-        resolver.add(ride, vehicle, score) unless score == 0
-      end
-
-      resolver.solve
+    def assign_best_ride(vehicle)
+      budgets = budget_achievable_rides(vehicle)
+      vehicle.assign(budgets.best_score_ride)
     end
 
-    private
+    def budget_achievable_rides(vehicle)
+      budgets = Budgets.new(bonus)
+      rides.process_achievable(vehicle.position, vehicle.free_at) do |ride|
+        budget = vehicle.budget(ride)
+        budgets.add(budget)
+      end
 
-    def score_ride(vehicle, ride)
-      budget = vehicle.budget(ride)
-      budget.score(bonus)
+      budgets
+    end
+
+    def any_ride_achievable?(vehicle)
+      rides.achievable_count(vehicle.position, vehicle.free_at) > 0
     end
   end
 end

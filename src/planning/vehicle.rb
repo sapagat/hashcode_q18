@@ -46,9 +46,7 @@ class Vehicle
   end
 
   def budget(ride)
-    budget = Budget.new(ride)
-    budget.at_scenario(@position, @free_at)
-    budget
+    Budget.new(ride, @position, @free_at)
   end
 
   private

@@ -14,14 +14,6 @@ class Clock
     end
   end
 
-  def forward_to(step)
-    @current_step = step
-  end
-
-  def reset
-    @current_step = 0
-  end
-
   private
 
   def inform

@@ -26,6 +26,16 @@ class Rides
     end
   end
 
+  def process_achievable(position, step)
+    achievable(position, step).each do |ride|
+      yield(ride)
+    end
+  end
+
+  def achievable_count(position, step)
+    achievable(position, step).count
+  end
+
   def count_pending
     @rides.select do |ride|
       !ride.finished_in_time?
@@ -45,6 +55,12 @@ class Rides
   end
 
   private
+
+  def achievable(position, step)
+    @rides.select do |ride|
+      ride.unassigned? && ride.achievable?(position, step)
+    end
+  end
 
   def unassigned
     @rides.select do |ride|

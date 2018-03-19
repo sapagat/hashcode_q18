@@ -24,11 +24,11 @@ class TimeRange
     in_range?(range.start) && in_range?(range.finish)
   end
 
-  private
-
   def in_range?(step)
     step >= @start && step <= @finish
   end
+
+  private
 
   class Null
     def start

@@ -53,10 +53,23 @@ class Ride
     @vector.distance_from_origin_to(position)
   end
 
+  def achievable?(position, step)
+    initial_step = step + cost(distance_to(position))
+
+    start = initial_step + wait_time(initial_step)
+    finish = start + distance_cost
+
+    @available.in_range?(finish)
+  end
+
   private
 
   def wait_time(step)
     @available.until_being_in_range_from(step)
+  end
+
+  def cost(distance)
+    distance
   end
 
   def distance_cost

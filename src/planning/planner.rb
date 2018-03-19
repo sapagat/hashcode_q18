@@ -19,6 +19,10 @@ class Planner
     @settings.bonus
   end
 
+  def max_steps
+    @settings.max_steps
+  end
+
   def clock
     @clock ||= Clock.new(@settings.max_steps)
   end

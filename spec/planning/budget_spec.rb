@@ -6,8 +6,7 @@ describe 'Budget' do
     position = vector.origin
     vehicle_ready = a_bit_late
 
-    budget = Budget.new(ride)
-    budget.at_scenario(position, vehicle_ready)
+    budget = Budget.new(ride, position, vehicle_ready)
 
     expect(budget.score(bonus)).to eq(ride.mileage)
   end
@@ -17,8 +16,7 @@ describe 'Budget' do
     position = vector.origin
     vehicle_ready = on_time
 
-    budget = Budget.new(ride)
-    budget.at_scenario(position, vehicle_ready)
+    budget = Budget.new(ride, position, vehicle_ready)
 
     expect(budget.score(bonus)).to eq(ride.mileage + bonus)
   end
@@ -28,8 +26,7 @@ describe 'Budget' do
     position = vector.origin
     vehicle_ready = very_late
 
-    budget = Budget.new(ride)
-    budget.at_scenario(position, vehicle_ready)
+    budget = Budget.new(ride, position, vehicle_ready)
 
     expect(budget.score(bonus)).to eq(0)
   end

@@ -1,5 +1,4 @@
 require_relative '../planner'
-require_relative '../clock'
 
 module Planners
   class FirstRideFree < Planner

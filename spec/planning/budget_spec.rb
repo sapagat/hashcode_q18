@@ -1,32 +1,32 @@
 require_relative '../../src/planning/budget'
+require_relative '../../src/planning/time_range'
+require_relative '../../src/planning/ride'
+require_relative '../../src/planning/checkpoint'
 
 describe 'Budget' do
   it 'has score that depends on the ride distance' do
     ride = a_ride
-    position = vector.origin
-    vehicle_ready = a_bit_late
+    checkpoint = Checkpoint.new(vector.origin, a_bit_late)
 
-    budget = Budget.new(ride, position, vehicle_ready)
+    budget = Budget.new(ride, checkpoint)
 
     expect(budget.score(bonus)).to eq(ride.mileage)
   end
 
   it 'has a better score if the ride can be performed timeless' do
     ride = a_ride
-    position = vector.origin
-    vehicle_ready = on_time
+    checkpoint = Checkpoint.new(vector.origin, on_time)
 
-    budget = Budget.new(ride, position, vehicle_ready)
+    budget = Budget.new(ride, checkpoint)
 
     expect(budget.score(bonus)).to eq(ride.mileage + bonus)
   end
 
   it 'has a bad score if the ride cannot be performed in time' do
     ride = a_ride
-    position = vector.origin
-    vehicle_ready = very_late
+    checkpoint = Checkpoint.new(vector.origin, very_late)
 
-    budget = Budget.new(ride, position, vehicle_ready)
+    budget = Budget.new(ride, checkpoint)
 
     expect(budget.score(bonus)).to eq(0)
   end

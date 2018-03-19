@@ -3,7 +3,7 @@ require_relative '../../src/planning/ride'
 
 describe 'Vehicle' do
   it 'can make a prevision when it will be free' do
-    vehicle = Vehicle.at_garage
+    vehicle = Vehicle.new
 
     vehicle.assign(a_ride)
 
@@ -12,7 +12,7 @@ describe 'Vehicle' do
   end
 
   it 'marks the ride as assigned' do
-    vehicle = Vehicle.at_garage
+    vehicle = Vehicle.new
     ride = a_ride
 
     vehicle.assign(ride)
@@ -21,15 +21,15 @@ describe 'Vehicle' do
   end
 
   it 'chages position once a ride has been assigned' do
-    vehicle = Vehicle.at_garage
+    vehicle = Vehicle.new
 
     vehicle.assign(a_ride)
 
-    expect(vehicle.position).to eq(term)
+    expect(vehicle.checkpoint.position).to eq(term)
   end
 
   it 'can budget a ride' do
-    vehicle = Vehicle.at_garage
+    vehicle = Vehicle.new
     ride = a_ride
 
     budget = vehicle.budget(ride)

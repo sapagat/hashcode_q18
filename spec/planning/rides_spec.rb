@@ -22,16 +22,19 @@ describe 'Rides' do
   end
 
   def a_ride
+    Ride.new(vector, available)
+  end
+
+  def vector
     vector = Vector.new(
       Position.new(0, 0),
       Position.new(1, 1)
     )
-    Ride.new(vector, available)
   end
 
   def an_assigned_ride
     ride = a_ride
-    ride.execute_at(available.start)
+    ride.execute_from(Checkpoint.new(vector.origin, available.start))
     ride
   end
 

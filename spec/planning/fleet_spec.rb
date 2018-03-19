@@ -32,7 +32,7 @@ describe 'Fleet' do
   end
 
   def a_vehicle
-    Vehicle.at_garage
+    Vehicle.new
   end
 
   def a_ride

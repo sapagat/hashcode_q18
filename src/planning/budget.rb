@@ -1,10 +1,9 @@
 class Budget
   attr_reader :ride
 
-  def initialize(ride, origin, start)
+  def initialize(ride, checkpoint)
     @ride = ride
-    @origin = origin
-    @start = start
+    @checkpoint = checkpoint
   end
 
   def score(bonus)
@@ -25,17 +24,7 @@ class Budget
     bonus
   end
 
-  def vehicle_ready
-    lead_distance = @ride.distance_to(@origin)
-
-    @start + calculate_cost(lead_distance)
-  end
-
-  def calculate_cost(distance)
-    distance
-  end
-
   def simulated_ride
-    @simulated_ride ||= @ride.simulate(vehicle_ready)
+    @simulated_ride ||= @ride.simulate(@checkpoint)
   end
 end

@@ -1,19 +1,11 @@
-require_relative 'position'
 require_relative 'budget'
+require_relative 'checkpoint'
 
 class Vehicle
-  GARAGE_POSITION = Position.new(0, 0)
-  BEGINING_OF_TIME = 0
+  attr_reader :checkpoint
 
-  attr_reader :position, :free_at
-
-  def self.at_garage
-    new(GARAGE_POSITION)
-  end
-
-  def initialize(position)
-    @position = position
-    @free_at = BEGINING_OF_TIME
+  def initialize
+    @checkpoint = Checkpoint.origin
   end
 
   def assign(ride)
@@ -25,7 +17,7 @@ class Vehicle
   end
 
   def free?(step)
-    @free_at <= step
+    @checkpoint.step <= step
   end
 
   def total_assignments
@@ -37,29 +29,17 @@ class Vehicle
   end
 
   def perform(ride)
-    step = calculate_initial_step(ride)
-
-    result = ride.execute_at(step)
-
-    @position = result[:position]
-    @free_at = result[:step]
+    @checkpoint = ride.execute_from(@checkpoint)
   end
 
   def budget(ride)
-    Budget.new(ride, @position, @free_at)
+    Budget.new(ride, @checkpoint)
   end
 
   private
 
   def cost(distance)
     distance
-  end
-
-  def calculate_initial_step(ride)
-    start_step = @free_at
-    lead_distance = ride.distance_to(@position)
-
-    start_step + cost(lead_distance)
   end
 
   def assignments

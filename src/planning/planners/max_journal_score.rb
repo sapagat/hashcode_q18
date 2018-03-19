@@ -24,7 +24,7 @@ module Planners
 
     def budget_achievable_rides(vehicle)
       budgets = Budgets.new(bonus)
-      rides.process_achievable(vehicle.position, vehicle.free_at) do |ride|
+      rides.process_achievable(vehicle.checkpoint) do |ride|
         budget = vehicle.budget(ride)
         budgets.add(budget)
       end
@@ -33,7 +33,7 @@ module Planners
     end
 
     def any_ride_achievable?(vehicle)
-      rides.achievable_count(vehicle.position, vehicle.free_at) > 0
+      rides.any_achievable?(vehicle.checkpoint)
     end
   end
 end

@@ -10,9 +10,10 @@ describe 'Ride' do
     available = TimeRange.new(0, 3)
     ride = Ride.new(vector, available)
     start_step = 1
-    result = ride.execute_at(start_step)
+    start_checkpoint = Checkpoint.new(Position.new(0, 0), start_step)
+    finish_checkpoint = ride.execute_from(start_checkpoint)
 
-    expect(result[:step]).to eq(start_step + vector.distance)
+    expect(finish_checkpoint.step).to eq(start_step + vector.distance)
   end
 
   it 'waits until the earliest start has been reached' do
@@ -23,10 +24,11 @@ describe 'Ride' do
     available = TimeRange.new(2, 5)
     ride = Ride.new(vector, available)
     start_step = 0
-    result = ride.execute_at(start_step)
+    start_checkpoint = Checkpoint.new(Position.new(0, 0), start_step)
+    checkpoint = ride.execute_from(start_checkpoint)
 
     wait_time = 2
-    expect(result[:step]).to eq(start_step + wait_time + vector.distance)
+    expect(checkpoint.step).to eq(start_step + wait_time + vector.distance)
   end
 
   it 'does not assigned the ride on a simulation' do
@@ -37,7 +39,7 @@ describe 'Ride' do
     available = TimeRange.new(2, 5)
     ride = Ride.new(vector, available)
     start_step = 0
-    ride.simulate(start_step)
+    ride.simulate(Checkpoint.new(Position.new(0, 0), 0))
 
     expect(ride.unassigned?).to eq(true)
   end
@@ -49,10 +51,12 @@ describe 'Ride' do
     )
     available = TimeRange.new(2, 5)
     ride = Ride.new(vector, available)
+    achievable_checkpoint = Checkpoint.new(Position.new(0, 0), 1)
+    unachievable_checkpoint = Checkpoint.new(Position.new(0, 0), 7)
 
-    expect(ride.achievable?(Position.new(0,0), 1)).to eq(true)
-    expect(ride.achievable?(Position.new(0,0), 7)).to eq(false)
-    expect(ride.achievable?(Position.new(3,3), 5)).to eq(false)
+    expect(ride.achievable?(Checkpoint.new(Position.new(0, 0), 1))).to eq(true)
+    expect(ride.achievable?(Checkpoint.new(Position.new(0, 0), 7))).to eq(false)
+    expect(ride.achievable?(Checkpoint.new(Position.new(3,3), 5))).to eq(false)
   end
 
   def a_bonus

@@ -26,14 +26,14 @@ class Rides
     end
   end
 
-  def process_achievable(position, step)
-    achievable(position, step).each do |ride|
+  def process_achievable(checkpoint)
+    achievable(checkpoint).each do |ride|
       yield(ride)
     end
   end
 
-  def achievable_count(position, step)
-    achievable(position, step).count
+  def any_achievable?(checkpoint)
+    achievable_count(checkpoint) > 0
   end
 
   def count_pending
@@ -56,9 +56,13 @@ class Rides
 
   private
 
-  def achievable(position, step)
+  def achievable_count(checkpoint)
+    achievable(checkpoint).count
+  end
+
+  def achievable(checkpoint)
     @rides.select do |ride|
-      ride.unassigned? && ride.achievable?(position, step)
+      ride.unassigned? && ride.achievable?(checkpoint)
     end
   end
 

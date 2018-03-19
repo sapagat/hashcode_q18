@@ -42,7 +42,7 @@ module Commands
 
     def each_vehicle_rides
       @output.vehicle_rides do |_count, rides_indexes|
-        vehicle = Vehicle.at_garage
+        vehicle = Vehicle.new
         rides = Rides.new
         rides_indexes.each do |index|
           ride = @input.ride(index)

@@ -15,21 +15,18 @@ class Ride
     @id = id
   end
 
-  def execute_at(initial_step)
-    start = initial_step + wait_time(initial_step)
+  def execute_from(checkpoint)
+    start = earliest_start(checkpoint)
     finish = start + distance_cost
 
     @disposed = TimeRange.new(start, finish)
 
-    {
-      step: @disposed.finish,
-      position: @vector.term
-    }
+    Checkpoint.new(@vector.term, @disposed.finish)
   end
 
-  def simulate(initial_step)
+  def simulate(checkpoint)
     copy = self.dup
-    copy.execute_at(initial_step)
+    copy.execute_from(checkpoint)
     copy
   end
 
@@ -49,14 +46,8 @@ class Ride
     @vector.distance
   end
 
-  def distance_to(position)
-    @vector.distance_from_origin_to(position)
-  end
-
-  def achievable?(position, step)
-    initial_step = step + cost(distance_to(position))
-
-    start = initial_step + wait_time(initial_step)
+  def achievable?(checkpoint)
+    start = earliest_start(checkpoint)
     finish = start + distance_cost
 
     @available.in_range?(finish)
@@ -64,8 +55,18 @@ class Ride
 
   private
 
+  def earliest_start(checkpoint)
+    lead_distance = distance_to(checkpoint.position)
+    initial_step = checkpoint.step + cost(lead_distance)
+    initial_step + wait_time(initial_step)
+  end
+
   def wait_time(step)
     @available.until_being_in_range_from(step)
+  end
+
+  def distance_to(position)
+    @vector.distance_from_origin_to(position)
   end
 
   def cost(distance)
